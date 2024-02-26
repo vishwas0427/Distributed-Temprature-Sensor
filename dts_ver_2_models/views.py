@@ -126,22 +126,7 @@ def delete_Data(request):
 
     return render(request, 'configuration.html')
 
-# def algo_graph(request):
-#     channels_data = {}
-#     zonedata=list(zone_config.objects.all().values())
-#     All_channels=[list(channel_1_graph_data.objects.all().values())[:-2],list(channel_2_graph_data.objects.all().values())[:-2],
-#                   list(channel_4_graph_data.objects.all().values())[:-2],list(channel_4_graph_data.objects.all().values())[:-2]]
-#     for channel_num in range(1, 5):
-#         channel_data = list(globals()[f'channel_{channel_num}_graph_data'].objects.all().values())
-#         x_values = [item['temprature_curve_x_axis'] for item in channel_data][:-2]
-#         y_values = [item['temprature_curve_y_axis'] for item in channel_data][:-2]
-#         channels_data[f'ch{channel_num}_x_data'] = x_values
-#         channels_data[f'ch{channel_num}_y_data'] = y_values
-#     # print(All_channels)
-#     return JsonResponse({f'ch{get_channel_num}_x_data': channels_data[f'ch{get_channel_num}_x_data'],
-#                          f'ch{get_channel_num}_y_data': channels_data[f'ch{get_channel_num}_y_data'],
-#                          'get_fiber_len': get_fiber_len,'zonedata':zonedata
-#                          ,'All_channels':All_channels})
+
 def algo_graph(request):
     a=list(channel_1_graph_data.objects.all().values())[:-2]
     # print(a)
@@ -167,13 +152,6 @@ def algo_graph(request):
                         'zonedata': zonedata, 'All_channels': All_channels
                         })
 
-# def my_func(request):
-#     zonedata=list(zone_config.objects.all().values())
-#     All_channels=[list(channel_1_graph_data.objects.all().values())[:-2],list(channel_2_graph_data.objects.all().values())[:-2],
-#                   list(channel_3_graph_data.objects.all().values())[:-2],list(channel_4_graph_data.objects.all().values())[:-2]]
-#     zonedata_json = json.dumps(zonedata, cls=DjangoJSONEncoder)
-#     All_channels_json = json.dumps(All_channels, cls=DjangoJSONEncoder)
-#     print(zonedata_json)
 
     return render(request, 'channel 1.html', {'zonedata_json': zonedata_json,
         'All_channels_json': All_channels_json})
