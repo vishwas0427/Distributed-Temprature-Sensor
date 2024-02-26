@@ -1,0 +1,2400 @@
+{%load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>DTS-VER-2</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href={% static '/assets/img/favicon.png' %} rel="icon">
+    <link href={% static '/assets/img/apple-touch-icon.png' %} rel="apple-touch-icon">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href={% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
+    <link href={% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %} rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href={% static 'assets/css/style.css' %} rel="stylesheet">
+
+    <!-- ===== DataTables Js and CSS File ===== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <!-- =============APEXCHARTS============ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+</head>
+
+<body style="height: 100% ;overflow: hidden;">
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a class="logo d-flex align-items-center">
+                <img src={% static 'assets/img/logo.png' %} alt="">
+                <span class="d-none d-lg-block">DTS-VER-2</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+    </header><!-- End Header -->
+
+    <!-- ===== Sidebar ===== -->
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item" style="width: 40vh;">
+                <a class="nav-link " href="dashboard_page">
+                    <i class="bi bi-houses-fill" style="color: #0000B8"></i>
+                    <span style="color: #0000B8;font-size:2.5vh;">Dashboard</span>
+                </a>
+                <a class="nav-link " href="configuration_page">
+                    <i class="bi bi-gear-fill" style="color: #0000B8"></i>
+                    <span style="color: #0000B8;font-size:2.5vh;">Configurations</span>
+                </a>
+                <a class="nav-link " href="report_page">
+                    <i class="bi bi-file-earmark-text" style="color: #0000B8"></i>
+                    <span style="color: #0000B8;font-size:2.5vh;">Reports</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- ===== End Sidebar ===== -->
+    <main id="main" class="main">
+        <section class="section dashboard">
+            <!-- ===============================================four channels=============================================== -->
+            <div id="four_channels" class="row" class="content" style="flex: 1;">
+                <!-- ==================================================CHANNEL 1====================================================================== -->
+                <div
+                    style="border:1px solid gray;margin-left: 10px;float: left;width:49.5%;cursor: pointer;height: 43vh;">
+                    <div style="margin-top: 2%;">
+                        <h6>CHANNEL1</h6>
+                    </div>
+                    <!-- ====== Both side columns ===== -->
+                    <div id="myDiv1" col-lg-6 style="height: 100vh;">
+                        <!-- Corrected height value -->
+                        <script>
+                            // Your existing ApexCharts script
+                            var startXValue;
+                            var endXValue;
+                            // var existingData = []; // Maintain a separate variable for existing data
+                            var chartData1 = {
+                                series: [{
+                                    name: 'Series 1',
+                                    data: []
+                                }],
+                                chart: {
+                                    height: '88%',
+                                    type: 'line',
+                                    zoom: {
+                                        enabled: true,
+                                        type: 'xy',
+                                    },
+                                    events: {
+                                        beforeZoom: function (chartContext, { xaxis }) {
+                                            // Access the start and end x values
+                                            startXValue = xaxis.min;
+                                            endXValue = xaxis.max;
+
+                                            // Log or use the values as needed
+                                            console.log('Start X:', startXValue);
+                                            console.log('End X:', endXValue);
+                                        }
+                                    }
+                                },
+                                xaxis: {
+                                    categories: [],
+                                    labels: {
+                                        show: false
+                                    },
+                                    // max: '2000'
+                                },
+                                yaxis: {
+                                    max: 100,
+                                    min: 0
+                                },
+                                stroke: {
+                                    width: 1.3,
+                                    colors: ['#ff0000']
+                                }
+                            };
+
+                            var chart1 = new ApexCharts(document.querySelector("#myDiv1"), chartData1);
+                            chart1.render();
+
+                            function graph_func1() {
+                                $.ajax({
+                                    url: '/graph_data/', // Replace with your Django view's URL
+                                    method: "GET",
+                                    dataType: 'json',
+                                    success: function (response) {
+                                        var fiber_len = parseInt(response.get_fiber_len);
+
+                                        // Check if data has changed before updating the series
+                                        chart1.updateSeries([{
+                                            data: response.ch1_y_data,
+                                        }]);
+
+                                        chart1.updateOptions({
+                                            xaxis: {
+                                                categories: response.ch1_x_data,
+                                                // max: fiber_len
+                                            },
+                                        });
+
+                                        if (endXValue) {
+                                            chart1.updateOptions({
+                                                xaxis: {
+                                                    min: startXValue,
+                                                    max: endXValue,
+                                                },
+                                            });
+                                        }
+                                        chart2.updateSeries([{
+                                            data: response.ch2_y_data,
+                                        }]);
+
+                                        chart2.updateOptions({
+                                            xaxis: {
+                                                categories: response.ch2_x_data,
+                                                // max: fiber_len
+                                            },
+                                        });
+
+                                        if (endXValue) {
+                                            chart2.updateOptions({
+                                                xaxis: {
+                                                    min: startXValue,
+                                                    max: endXValue,
+                                                },
+                                            });
+                                        }
+                                        chart3.updateSeries([{
+                                            data: response.ch3_y_data,
+                                        }]);
+
+                                        chart3.updateOptions({
+                                            xaxis: {
+                                                categories: response.ch3_x_data,
+                                                // max: fiber_len
+                                            },
+                                        });
+
+                                        if (endXValue) {
+                                            chart3.updateOptions({
+                                                xaxis: {
+                                                    min: startXValue,
+                                                    max: endXValue,
+                                                },
+                                            });
+                                        }
+                                        chart4.updateSeries([{
+                                            data: response.ch4_y_data,
+                                        }]);
+
+                                        chart4.updateOptions({
+                                            xaxis: {
+                                                categories: response.ch4_x_data,
+                                                // max: fiber_len
+                                            },
+                                        });
+
+                                        if (endXValue) {
+                                            chart4.updateOptions({
+                                                xaxis: {
+                                                    min: startXValue,
+                                                    max: endXValue,
+                                                },
+                                            });
+                                        }
+                                    },
+
+                                    error: function (error) {
+                                        console.error("Error receiving data:", error);
+                                    }
+                                });
+                            }
+                        </script>
+                    </div>
+
+                </div>
+                <!-- ==================================================CHANNEL 2====================================================================== -->
+
+                <div style="border:1px solid gray;float: right;width:49%;cursor: pointer;height: 43vh;">
+                    <div style="margin-top: 2%;">
+                        <h6>CHANNEL2</h6>
+                    </div>
+                    <div id="myDiv2" col-lg-6 style="height: 100vh;">
+                        <script>
+                            // Your existing ApexCharts script
+                            var startXValue;
+                            var endXValue;
+                            var chartData2 = {
+                                series: [{
+                                    name: 'Series 1',
+                                    data: []
+                                }],
+                                chart: {
+                                    height: '88%',
+                                    type: 'line',
+                                    zoom: {
+                                        enabled: true,
+                                        type: 'xy',
+                                    },
+                                    events: {
+                                        beforeZoom: function (chartContext, { xaxis }) {
+                                            // Access the start and end x values
+                                            startXValue = xaxis.min;
+                                            endXValue = xaxis.max;
+
+                                            // Log or use the values as needed
+                                            console.log('Start X:', startXValue);
+                                            console.log('End X:', endXValue);
+                                        }
+                                    }
+                                },
+                                xaxis: {
+                                    categories: [],
+                                    labels: {
+                                        show: false
+                                    },
+                                    // max: '2000'
+                                },
+                                yaxis: {
+                                    max: 100,
+                                    min: 0
+                                },
+                                stroke: {
+                                    width: 1.3,
+                                    colors: ['#ff0000']
+                                }
+                            };
+
+                            var chart2 = new ApexCharts(document.querySelector("#myDiv2"), chartData2);
+                            chart2.render();
+                        
+                        </script>
+                    </div>
+                </div>
+
+                <!-- ==================================================CHANNEL 3====================================================================== -->
+                <div
+                    style="border:1px solid gray;margin-left: 10px;float: left;width:49.5%;cursor: pointer;height: 43vh;">
+                    <!-- Corrected height value -->
+                    <div style="margin-top: 2%;">
+                        <h6>CHANNEL3</h6>
+                    </div>
+                    <div id="myDiv3" col-lg-6 style="height: 100vh;">
+                        <script>
+                            // Your existing ApexCharts script
+                            var startXValue;
+                            var endXValue;
+                            var chartData3 = {
+                                series: [{
+                                    name: 'Series 1',
+                                    data: []
+                                }],
+                                chart: {
+                                    height: '88%',
+                                    type: 'line',
+                                    zoom: {
+                                        enabled: true,
+                                        type: 'xy',
+                                    },
+                                    events: {
+                                        beforeZoom: function (chartContext, { xaxis }) {
+                                            // Access the start and end x values
+                                            startXValue = xaxis.min;
+                                            endXValue = xaxis.max;
+
+                                            // Log or use the values as needed
+                                            console.log('Start X:', startXValue);
+                                            console.log('End X:', endXValue);
+                                        }
+                                    }
+                                },
+                                xaxis: {
+                                    categories: [],
+                                    labels: {
+                                        show: false
+                                    },
+                                    // max: '2000'
+                                },
+                                yaxis: {
+                                    max: 100,
+                                    min: 0
+                                },
+                                stroke: {
+                                    width: 1.3,
+                                    colors: ['#ff0000']
+                                }
+                            };
+
+                            var chart3 = new ApexCharts(document.querySelector("#myDiv3"), chartData3);
+                            chart3.render(); 
+                        </script>
+                    </div>
+                </div>
+                <!-- ==================================================CHANNEL 4====================================================================== -->
+
+                <div style="border:1px solid gray;float: right;width:49%;cursor: pointer;height: 43vh;">
+                    <div style="margin-top: 2%;">
+                        <h6>CHANNEL4</h6>
+                    </div>
+                    <div id="myDiv4" col-lg-6 style="height: 100vh;">
+                        <!-- Corrected height value -->
+
+                        <script>
+                            // Your existing ApexCharts script
+                            var startXValue;
+                            var endXValue;
+                            var chartData4 = {
+                                series: [{
+                                    name: 'Series 1',
+                                    data: []
+                                }],
+                                chart: {
+                                    height: '88%',
+                                    type: 'line',
+                                    zoom: {
+                                        enabled: true,
+                                        type: 'xy',
+                                    },
+                                    events: {
+                                        beforeZoom: function (chartContext, { xaxis }) {
+                                            // Access the start and end x values
+                                            startXValue = xaxis.min;
+                                            endXValue = xaxis.max;
+
+                                            // Log or use the values as needed
+                                            console.log('Start X:', startXValue);
+                                            console.log('End X:', endXValue);
+                                        }
+                                    }
+                                },
+                                xaxis: {
+                                    categories: [],
+                                    labels: {
+                                        show: false
+                                    },
+                                },
+                                yaxis: {
+                                    max: 100,
+                                    min: 0
+                                },
+                                stroke: {
+                                    width: 1.3,
+                                    colors: ['#ff0000']
+                                }
+                            };
+
+                            var chart4 = new ApexCharts(document.querySelector("#myDiv4"), chartData4);
+                            chart4.render();
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="Div1"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);z-index: 999999;display: none;">
+        <div style="display: flex;">
+            <div
+                style="width: 80vh; height: 80vh; border-radius: 50%; background-color: rgb(0, 0, 0); margin-left: 66vh;margin-top: 10vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 35vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 15vh;margin-left: 17vh; font-size:2.5vh; color: #fc0000; ">
+                    <p id="channel_name">Channel :</p>
+                </div>
+                <div style="position: absolute; margin-top: 20vh;margin-left: 17vh; font-size:2.5vh; color: #ff0000; ">
+                    <p id="highest-temperature">Highest Temperature:45</p>
+                </div>
+                <!-- <div style="position: absolute;margin-top: 18vh;margin-left: 10vh;; font-size:2.5vh; color: #ff0000;">
+                <p style="margin-left: 7vh; margin-top: 50px;">Zone name:</p>
+            </div> -->
+                <iframe src="{% static 'Alert Alarm.wav' %}" allow="autoplay" style="display:none" id="iframeAudio">
+                </iframe>
+                <audio id="player" loop autoplay style="position: absolute; margin-top: 25vh; margin-left: 17vh;">
+                    <source src="{% static 'Alert Alarm.wav' %}" type="audio/wav">
+
+                </audio>
+
+                <div class="card-title" type="text"
+                    style="height: 18vh; width: 50vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 15vh; margin-top: 30vh;">
+                    <p id="zone-name">Zone name: </p>
+                </div>
+                <div style="margin-top: 7vh;margin-left: 17vh;">
+                    <button onclick="showMoreDetails();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 16vh; height: 6vh ;font-size: 2.5vh;">Show
+                        More</button>
+                    <button onclick="hideAlert();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 10vh;font-size: 2.5vh; width: 17vh; height: 6vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ----------- Alertbox Scripting ------------ -->
+    <!-- <script>
+        var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (!isChrome) {
+            $('#iframeAudio').remove()
+        }
+        else {
+            $('#playAudio').remove() // just to make sure that it will not have 2x audio in the background 
+        }
+    </script> -->
+
+
+    <!-- =============================================================FOR TWO CHANNELS=========================================================================== -->
+    <div id="Div2"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);z-index: 999999;display: none;">
+        <div style="display: flex;">
+            <div
+                style="width: 70vh; height: 70vh; border-radius: 50%; background-color: rgb(0, 0, 0); margin-left: 35vh;margin-top: 15vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 30vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 10vh;margin-left: 12vh; font-size:2.5vh; color: #fc0000; ">
+                    <p id="channel_name2_1">Channel Num:</p>
+                </div>
+                <div style="position: absolute; margin-top: 15vh;margin-left: 12vh; font-size:2.5vh; color: #ff0000; ">
+                    <p id="highest-temperature2_1">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 18vh; width: 45vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 15vh; margin-top: 30vh;">
+                    <p id="zone-name2_1">Zone name: </p>
+                </div>
+                <div style="margin-top: 7vh;margin-left: 15vh;">
+                    <button onclick="showMoreDetails2_1();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 16vh; height: 6vh ;font-size: 2.5vh;">Show
+                        More</button>
+                    <button onclick="hideAlert2_1();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 10vh;font-size: 2.5vh; width: 17vh; height: 6vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer2_1"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails2_1();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData2_1" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+            <div
+                style="width: 70vh; height: 70vh; border-radius: 50%; background-color: rgb(0, 0, 0); margin-left: 5vh;margin-top: 15vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 30vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 10vh;margin-left: 12vh; font-size:2.5vh; color: #fc0000; ">
+                    <p id="channel_name2_2">Channel Num:</p>
+                </div>
+                <div style="position: absolute; margin-top: 15vh;margin-left: 12vh; font-size:2.5vh; color: #ff0000; ">
+                    <p id="highest-temperature2_2">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 18vh; width: 45vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 13vh; margin-top: 30vh;">
+                    <p id="zone-name2_2">Zone name: </p>
+                </div>
+                <div style="margin-top: 7vh;margin-left: 15vh;">
+                    <button onclick="showMoreDetails2_2();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 16vh; height: 6vh ;font-size: 2.5vh;">Show
+                        More</button>
+                    <button onclick="hideAlert2_2();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 10vh;font-size: 2.5vh; width: 17vh; height: 6vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer2_2"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails2_2();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData2_2" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  ====================================================FOR 3 CHANNELS========================================================= -->
+    <div id="Div3"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);display: none;z-index: 999999;">
+        <div style="display: flex;">
+            <div 
+                style="width: 60vh; height: 60vh; border-radius: 50%; background-color: rgb(0, 0, 0); margin-left: 13vh;margin-top: 22vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 25vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 12vh;margin-left: 8vh; font-size: 2.5vh; color: #fc0000; ">
+                    <p id="channel_name3_1">Channel Num:</p>
+                </div>
+                <div style="position: absolute; margin-top: 18vh;margin-left: 8vh; font-size: 2.5vh; color: #ff0000; ">
+                    <p id="highest-temperature3_1">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 15vh; width: 35vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 13vh; margin-top: 25vh;">
+                    <p id="zone-name3_1">Zone name: </p>
+                </div>
+                <div style="margin-top: 7vh;margin-left: 13vh;">
+                    <button onclick="showMoreDetails3_1();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 16vh; height: 6vh ;font-size: 2.5vh;">Show
+                        More</button>
+                    <button onclick="hideAlert3_1();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 2vh;font-size: 2.5vh; width: 17vh; height: 6vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer3_1"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails3_1();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData3_1" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+            <div
+                style="width: 60vh; height: 60vh; border-radius: 50%; background-color: black; margin-left:2vh;margin-top: 22vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 25vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 12vh;margin-left: 8vh; font-size: 2.5vh; color: #fc0000; ">
+                    <p id="channel_name3_2">Channel Num:</p>
+                </div>
+                <div style="position: absolute; margin-top: 18vh;margin-left: 8vh; font-size: 2.5vh; color: #ff0000; ">
+                    <p id="highest-temperature3_2">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 15vh; width: 35vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 13vh; margin-top: 25vh;">
+                    <p id="zone-name3_2">Zone name: </p>
+                </div>
+                <div style="margin-top: 7vh;margin-left: 13vh;">
+                    <button onclick="showMoreDetails3_2();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 16vh; height: 6vh ;font-size: 2.5vh;">Show
+                        More</button>
+                    <button onclick="hideAlert3_2();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 2vh;font-size: 2.5vh; width: 17vh; height: 6vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer3_2"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails3_2();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData3_2" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="width: 60vh; height: 60vh; border-radius: 50%; background-color: black;margin-left:3vh;margin-top: 22vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 25vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 12vh;margin-left: 8vh; font-size: 2.5vh; color: #fc0000; ">
+                    <p id="channel_name3_3">Channel Num:</p>
+                </div>
+                <div style="position: absolute; margin-top: 18vh;margin-left: 8vh; font-size: 2.5vh; color: #ff0000; ">
+                    <p id="highest-temperature3_3">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 15vh; width: 35vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 13vh; margin-top: 25vh;">
+                    <p id="zone-name3_3">Zone name: </p>
+                </div>
+                <div style="margin-top: 7vh;margin-left: 13vh;">
+                    <button onclick="showMoreDetails3_3();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 16vh; height: 6vh ;font-size: 2.5vh;">Show
+                        More</button>
+                    <button onclick="hideAlert3_3();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 2vh;font-size: 2.5vh; width: 17vh; height: 6vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer3_3"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails3_3();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData3_3" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =======================================================================FOR FOUR CHANNELS=========================================================================== -->
+    <div id="Div4"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999999; display: none; flex-direction: column; align-items: center;"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);z-index: 999999;">
+        <div style="display: flex;">
+            <div
+                style="width: 45vh; height: 45vh; border-radius: 50%; background-color: rgb(0, 0, 0); margin-left: 5vh;margin-top: 5vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 18vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 8vh;margin-left: 8vh; font-size:2vh; color: #fc0000; ">
+                    <p id="channel_name4_1">Channel:</p>
+                </div>
+                <div style="position: absolute; margin-top: 11vh;margin-left: 8vh; font-size:2vh; color: #ff0000; ">
+                    <p id="highest-temperature4_1">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 11vh; width: 35vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 6vh; margin-top: 18vh;">
+                    <p id="zone-name4_1">Zone name: </p>
+                </div>
+                <div style="margin-top: 2vh;margin-left: 6vh;">
+                    <button onclick="showMoreDetails4_1();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 15vh; height: 5vh ;font-size: 2vh;">Show
+                        More</button>
+                    <button onclick="hideAlert4_1();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 2vh;font-size: 2vh; width: 15vh; height: 5vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer4_1"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails4_1();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData4_1" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+            <div
+                style="width: 45vh; height: 45vh; border-radius: 50%; background-color: black; margin-left:2vh;margin-top: 5vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 18vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 8vh;margin-left: 8vh; font-size:2vh; color: #fc0000; ">
+                    <p id="channel_name4_2">Channel:</p>
+                </div>
+                <div style="position: absolute; margin-top: 11vh;margin-left: 8vh; font-size:2vh; color: #ff0000; ">
+                    <p id="highest-temperature4_2">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 11vh; width: 35vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 6vh; margin-top: 18vh;">
+                    <p id="zone-name4_2">Zone name: </p>
+                </div>
+                <div style="margin-top: 2vh;margin-left: 6vh;">
+                    <button onclick="showMoreDetails4_2();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 15vh; height: 5vh ;font-size: 2vh;">Show
+                        More</button>
+                    <button onclick="hideAlert4_2();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 2vh;font-size: 2vh; width: 15vh; height: 5vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer4_2"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails4_2();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData4_2" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex;">
+            <div
+                style="width: 45vh; height: 45vh; border-radius: 50%; background-color: rgb(0, 0, 0); margin-left: 5vh;margin-top: 2vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 18vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 8vh;margin-left: 8vh; font-size:2vh; color: #fc0000; ">
+                    <p id="channel_name4_3">Channel:</p>
+                </div>
+                <div style="position: absolute; margin-top: 11vh;margin-left: 8vh; font-size:2vh; color: #ff0000; ">
+                    <p id="highest-temperature4_3">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 11vh; width: 35vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 6vh; margin-top: 18vh;">
+                    <p id="zone-name4_3">Zone name: </p>
+                </div>
+                <div style="margin-top: 2vh;margin-left: 6vh;">
+                    <button onclick="showMoreDetails4_3();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 15vh; height: 5vh ;font-size: 2vh;">Show
+                        More</button>
+                    <button onclick="hideAlert4_3();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 2vh;font-size: 2vh; width: 15vh; height: 5vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer4_3"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails4_3();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData4_3" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+            <div
+                style="width: 45vh; height: 45vh; border-radius: 50%; background-color: black; margin-left:2vh;margin-top: 2vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 18vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 8vh;margin-left: 8vh; font-size:2vh; color: #fc0000; ">
+                    <p id="channel_name4_4">Channel:</p>
+                </div>
+                <div style="position: absolute; margin-top: 11vh;margin-left: 8vh; font-size:2vh; color: #ff0000; ">
+                    <p id="highest-temperature4_4">Highest Temperature:45</p>
+                </div>
+                <div class="card-title" type="text"
+                    style="height: 11vh; width: 35vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 6vh; margin-top: 18vh;">
+                    <p id="zone-name4_4">Zone name: </p>
+                </div>
+                <div style="margin-top: 2vh;margin-left: 6vh;">
+                    <button onclick="showMoreDetails4_4();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 15vh; height: 5vh ;font-size: 2vh;z-index: 99;">Show
+                        More</button>
+                    <button onclick="hideAlert4_4();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 2vh;font-size: 2vh; width: 15vh; height: 5vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer4_4"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails4_4();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData4_4" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- ================================================SHOW MORE DETAILS================================= -->
+    <script>
+        // console.log("no error")
+        var uniqueChannelVerification = localStorage.getItem('uniqueChannelVerification')
+        var channel_len = localStorage.getItem('channel_len')
+        console.log(uniqueChannelVerification)
+        if (channel_len === '1') {
+
+            if (uniqueChannelVerification.includes('1')) {
+                function showMoreDetails() {
+                    // Get data from localStorage
+
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    // console.log(cloned_tempOrangeAlarmMaxList_ch1)
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    // console.log(cloned_tempRedAlarmMaxList_ch1)
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1);
+
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+
+                    document.getElementById("localStorageData").textContent = jsonStringWithoutBraces;
+
+                    document.getElementById("detailsContainer").style.display = "block";
+                }
+
+
+
+                function hideMoreDetails() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('2')) {
+                function showMoreDetails() {
+                    // Get data from localStorage
+
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2);
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer").style.display = "block";
+                }
+
+
+
+                function hideMoreDetails() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('3')) {
+                function showMoreDetails() {
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    //Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); //Remove square and curly braces
+                    document.getElementById("localStorageData").textContent = jsonStringWithoutBraces;
+                    //Show the details container
+                    document.getElementById("detailsContainer").style.display = "block";
+                }
+
+
+
+                function hideMoreDetails() {
+                    //Hide the details container
+                    document.getElementById("detailsContainer").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('4')) {
+                function showMoreDetails() {
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); //Remove square and curly braces
+                    document.getElementById("localStorageData").textContent = jsonStringWithoutBraces;
+                    //Show the details container
+                    document.getElementById("detailsContainer").style.display = "block";
+                }
+
+
+
+                function hideMoreDetails() {
+                    //  Hide the details container
+                    document.getElementById("detailsContainer").style.display = "none";
+                }
+            }
+        }
+
+        // =======================
+        if (channel_len === '2') {
+            // console.log(uniqueChannelVerification)
+            if (uniqueChannelVerification.includes('1,2')) {
+                console.log("no error")
+                function showMoreDetails2_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    //Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, '');//Remove square and curly braces
+                    document.getElementById("localStorageData2_1").textContent = jsonStringWithoutBraces;
+                    //Show the details container
+                    document.getElementById("detailsContainer2_1").style.display = "block";
+                }
+
+                function hideMoreDetails2_1() {
+                    //Hide the details container
+                    document.getElementById("detailsContainer2_1").style.display = "none";
+                }
+                function showMoreDetails2_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    //Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString3.replace(/[\[\]{}]/g, '');//Remove square and curly braces
+
+                    document.getElementById("localStorageData2_2").textContent = jsonStringWithoutBraces;
+
+                    // Show the details container
+                    document.getElementById("detailsContainer2_2").style.display = "block";
+                }
+
+                function hideMoreDetails2_2() {
+                    //Hide the details container
+                    document.getElementById("detailsContainer2_2").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('3,2')) {
+                function showMoreDetails2_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    //  Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); //Remove square and curly braces
+                    document.getElementById("localStorageData2_1").textContent = jsonStringWithoutBraces;
+
+                    // Show the details container
+                    document.getElementById("detailsContainer2_1").style.display = "block";
+                }
+
+                function hideMoreDetails2_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_1").style.display = "none";
+                }
+                function showMoreDetails2_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    //Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); //Remove square and curly braces
+                    document.getElementById("localStorageData2_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_2").style.display = "block";
+                }
+
+                function hideMoreDetails2_2() {
+                    //Hide the details container
+                    document.getElementById("detailsContainer2_2").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('3,4')) {
+                function showMoreDetails2_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData2_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_1").style.display = "block";
+                }
+
+                function hideMoreDetails2_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_1").style.display = "none";
+                }
+                function showMoreDetails2_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData2_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_2").style.display = "block";
+                }
+
+                function hideMoreDetails2_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_2").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('1,4')) {
+                function showMoreDetails2_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData2_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_1").style.display = "block";
+                }
+
+                function hideMoreDetails2_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_1").style.display = "none";
+                }
+                function showMoreDetails2_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData2_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_2").style.display = "block";
+                }
+
+                function hideMoreDetails2_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_2").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('2,4')) {
+                function showMoreDetails2_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    //Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); //Remove square and curly braces
+                    document.getElementById("localStorageData2_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_2").style.display = "block";
+                }
+
+                function hideMoreDetails2_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_1").style.display = "none";
+                }
+                function showMoreDetails2_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData2_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_2").style.display = "block";
+                }
+
+
+                function hideMoreDetails2_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_2").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('1,3')) {
+                function showMoreDetails2_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData2_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_1").style.display = "block";
+                }
+
+                function hideMoreDetails2_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_1").style.display = "none";
+                }
+                function showMoreDetails2_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData2_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer2_2").style.display = "block";
+                }
+
+                function hideMoreDetails2_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer2_2").style.display = "none";
+                }
+            }
+        }
+        if (channel_len == '3') {
+            if (uniqueChannelVerification.includes('1,2,3')) {
+                function showMoreDetails3_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_1").style.display = "block";
+                }
+
+                function hideMoreDetails3_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_1").style.display = "none";
+                }
+                function showMoreDetails3_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_2").style.display = "block";
+                }
+
+                function hideMoreDetails3_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_2").style.display = "none";
+                }
+                function showMoreDetails3_3() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString5 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces5 = jsonString5.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_3").textContent = jsonStringWithoutBraces5;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_3").style.display = "block";
+                }
+
+                function hideMoreDetails3_3() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_3").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('1,2,4')) {
+                function showMoreDetails3_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_1").style.display = "block";
+                }
+
+                function hideMoreDetails3_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_1").style.display = "none";
+                }
+                function showMoreDetails3_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_2").style.display = "block";
+                }
+
+                function hideMoreDetails3_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_2").style.display = "none";
+                }
+                function showMoreDetails3_3() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString5 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces5 = jsonString5.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_3").textContent = jsonStringWithoutBraces5;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_3").style.display = "block";
+                }
+
+                function hideMoreDetails3_3() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_3").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('1,3,4')) {
+                function showMoreDetails3_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_1").style.display = "block";
+                }
+
+                function hideMoreDetails3_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_1").style.display = "none";
+                }
+                function showMoreDetails3_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_2").style.display = "block";
+                }
+
+                function hideMoreDetails3_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_2").style.display = "none";
+                }
+                function showMoreDetails3_3() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString5 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces5 = jsonString5.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_3").textContent = jsonStringWithoutBraces5;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_3").style.display = "block";
+                }
+
+                function hideMoreDetails3_3() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_3").style.display = "none";
+                }
+            }
+            else if (uniqueChannelVerification.includes('2,3,4')) {
+                function showMoreDetails3_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_1").style.display = "block";
+                }
+
+                function hideMoreDetails3_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_1").style.display = "none";
+                }
+                function showMoreDetails3_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_2").style.display = "block";
+                }
+
+                function hideMoreDetails3_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_2").style.display = "none";
+                }
+                function showMoreDetails3_3() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString5 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces5 = jsonString5.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData3_3").textContent = jsonStringWithoutBraces5;
+                    // Show the details container
+                    document.getElementById("detailsContainer3_3").style.display = "block";
+                }
+
+                function hideMoreDetails3_3() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer3_3").style.display = "none";
+                }
+            }
+        }
+        if (channel_len == '4') {
+            if (uniqueChannelVerification.includes('1,2,3,4')) {
+
+                function showMoreDetails4_1() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch1_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch1 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch1_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch1.concat(cloned_tempRedAlarmMaxList_ch1)
+                    var jsonString = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces = jsonString.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData4_1").textContent = jsonStringWithoutBraces;
+                    // Show the details container
+                    document.getElementById("detailsContainer4_1").style.display = "block";
+                }
+
+                function hideMoreDetails4_1() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer4_1").style.display = "none";
+                }
+                function showMoreDetails4_2() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch2_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch2 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch2_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch2.concat(cloned_tempRedAlarmMaxList_ch2)
+                    var jsonString3 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces3 = jsonString3.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData4_2").textContent = jsonStringWithoutBraces3;
+                    // Show the details container
+                    document.getElementById("detailsContainer4_2").style.display = "block";
+                }
+
+                function hideMoreDetails4_2() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer4_2").style.display = "none";
+                }
+                function showMoreDetails4_3() {
+                    //-------------------------------------------------------
+                    var cloned_tempOrangeAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch3_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch3 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch3_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch3.concat(cloned_tempRedAlarmMaxList_ch3)
+                    var jsonString5 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces5 = jsonString5.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData4_3").textContent = jsonStringWithoutBraces5;
+                    // Show the details container
+                    document.getElementById("detailsContainer4_3").style.display = "block";
+                }
+
+                function hideMoreDetails4_3() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer4_3").style.display = "none";
+                }
+                function showMoreDetails4_4() {
+
+                    // Get data from localStorage
+                    var cloned_tempOrangeAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempOrangeAlarmMaxList_ch4_showmore'));
+                    var cloned_tempRedAlarmMaxList_ch4 = JSON.parse(localStorage.getItem('cloned_tempRedAlarmMaxList_ch4_showmore'));
+                    // Display data in the details container without square and curly braces
+                    var combinedArray = cloned_tempOrangeAlarmMaxList_ch4.concat(cloned_tempRedAlarmMaxList_ch4)
+                    var jsonString7 = JSON.stringify(combinedArray, null, 2);
+                    var jsonStringWithoutBraces7 = jsonString7.replace(/[\[\]{}]/g, ''); // Remove square and curly braces
+                    document.getElementById("localStorageData4_4").textContent = jsonStringWithoutBraces7;
+                    // Show the details container
+                    document.getElementById("detailsContainer4_4").style.display = "block";
+                }
+
+                function hideMoreDetails4_4() {
+                    // Hide the details container
+                    document.getElementById("detailsContainer4_4").style.display = "none";
+                }
+            }
+        }
+    </script>
+    <script>
+        function populateDataForDiv1(Zone_NameTRAM, Zone_NameTOAM, TOAM_H, TRAM_H, Ch_name) {
+            var ZoneNameTRAM = Zone_NameTRAM
+            // console.log('=============',Zone_NameTOAM)
+            var ZoneNameTOAM = Zone_NameTOAM;
+            var TOAM_HIGHEST_TEMP = TOAM_H;
+            var TRAM_HIGHEST_TEMP = TRAM_H;
+            var CHANNEL_NAME = Ch_name
+            // console.log(TOAM_H, ZoneNameTRAM)
+            var maxTemp = Math.max(TOAM_HIGHEST_TEMP, TRAM_HIGHEST_TEMP);
+            var channel_name1 = document.querySelector('#channel_name')
+            var highestTempElement = document.querySelector('#highest-temperature');
+            var UniqueZoneName = document.querySelector('#zone-name');
+
+            if (UniqueZoneName) {
+                UniqueZoneName.innerText = 'Zone name:' + ZoneNameTRAM;
+            }
+            if (UniqueZoneName) {
+                UniqueZoneName.innerText += ',' + ZoneNameTOAM;
+            }
+            if (highestTempElement) {
+                highestTempElement.innerText = 'Highest Temperature: ' + maxTemp;
+            }
+            if (channel_name1) {
+                channel_name1.innerText = 'Channel :' + CHANNEL_NAME;
+            }
+        }
+
+        function populateDataForDiv2(Zone_NameTRAM2_1, Zone_NameTOAM2_1, TOAM_H2_1, TRAM_H2_1, Ch_name2_1, Zone_NameTRAM2_2, Zone_NameTOAM2_2,
+            TOAM_H2_2, TRAM_H2_2, Ch_name2_2) {
+            console.log("no error", Ch_name2_1)
+            var ZoneNameTRAM2_1 = Zone_NameTRAM2_1
+            console.log(ZoneNameTRAM2_1)
+            var ZoneNameTOAM2_1 = Zone_NameTOAM2_1;
+            var TOAM_HIGHEST_TEMP2_1 = TOAM_H2_1;
+            var TRAM_HIGHEST_TEMP2_1 = TRAM_H2_1;
+            var CHANNEL_NAME2_1 = Ch_name2_1
+
+            var maxTemp2_1 = Math.max(TOAM_HIGHEST_TEMP2_1, TRAM_HIGHEST_TEMP2_1);
+
+            var ZoneNameTRAM2_2 = Zone_NameTRAM2_2
+            var ZoneNameTOAM2_2 = Zone_NameTOAM2_2;
+            var TOAM_HIGHEST_TEMP2_2 = TOAM_H2_2;
+            var TRAM_HIGHEST_TEMP2_2 = TRAM_H2_2;
+            var CHANNEL_NAME2_2 = Ch_name2_2
+            var maxTemp2_2 = Math.max(TOAM_HIGHEST_TEMP2_2, TRAM_HIGHEST_TEMP2_2);
+
+            var highestTempElement2_1 = document.querySelector('#highest-temperature2_1');
+            var UniqueZoneName2_1 = document.querySelector('#zone-name2_1');
+            var channel_name2_1 = document.querySelector('#channel_name2_1')
+
+            var highestTempElement2_2 = document.querySelector('#highest-temperature2_2');
+            var UniqueZoneName2_2 = document.querySelector('#zone-name2_2');
+            var channel_name2_2 = document.querySelector('#channel_name2_2')
+
+            if (UniqueZoneName2_1) {
+                UniqueZoneName2_1.innerText = 'Zone name: ' + ZoneNameTRAM2_1;
+            }
+            if (UniqueZoneName2_1) {
+                UniqueZoneName2_1.innerText += ', ' + ZoneNameTOAM2_1;
+            }
+            if (highestTempElement2_1) {
+                highestTempElement2_1.innerText = 'Highest Temperature: ' + maxTemp2_1;
+            }
+            if (channel_name2_1) {
+                channel_name2_1.innerText = 'Channel :' + CHANNEL_NAME2_1;
+            }
+            if (UniqueZoneName2_2) {
+                UniqueZoneName2_2.innerText = 'Zone name: ' + ZoneNameTRAM2_2;
+            }
+            if (UniqueZoneName2_2) {
+                UniqueZoneName2_2.innerText += ', ' + ZoneNameTOAM2_2;
+            }
+            if (highestTempElement2_2) {
+                highestTempElement2_2.innerText = 'Highest Temperature: ' + maxTemp2_2;
+            }
+            if (channel_name2_2) {
+                channel_name2_2.innerText = 'Channel :' + CHANNEL_NAME2_2;
+            }
+        }
+
+        function populateDataForDiv3(Zone_NameTRAM3_1, Zone_NameTOAM3_1, TOAM_H3_1, TRAM_H3_1, Ch_name3_1, Zone_NameTRAM3_2, Zone_NameTOAM3_2, TOAM_H3_2,
+            TRAM_H3_2, Ch_name3_2, Zone_NameTRAM3_3, Zone_NameTOAM3_3, TOAM_H3_3, TRAM_H3_3, Ch_name3_3) {
+            // console.log("==========", ZoneNameTOAM3_1)
+            var ZoneNameTRAM3_1 = Zone_NameTRAM3_1
+            var ZoneNameTOAM3_1 = Zone_NameTOAM3_1;
+            var TOAM_HIGHEST_TEMP3_1 = TOAM_H3_1;
+            var TRAM_HIGHEST_TEMP3_1 = TRAM_H3_1;
+            var CHANNEL_NAME3_1 = Ch_name3_1
+            var maxTemp3_1 = Math.max(TOAM_HIGHEST_TEMP3_1, TRAM_HIGHEST_TEMP3_1);
+
+            var ZoneNameTRAM3_2 = Zone_NameTRAM3_2
+            var ZoneNameTOAM3_2 = Zone_NameTOAM3_2;
+            var TOAM_HIGHEST_TEMP3_2 = TOAM_H3_2;
+            var TRAM_HIGHEST_TEMP3_2 = TRAM_H3_2;
+            var CHANNEL_NAME3_2 = Ch_name3_2
+            var maxTemp3_2 = Math.max(TOAM_HIGHEST_TEMP3_2, TRAM_HIGHEST_TEMP3_2);
+
+            var ZoneNameTRAM3_3 = Zone_NameTRAM3_3
+            var ZoneNameTOAM3_3 = Zone_NameTOAM3_3;
+            var TOAM_HIGHEST_TEMP3_3 = TOAM_H3_3;
+            var TRAM_HIGHEST_TEMP3_3 = TRAM_H3_3;
+            var CHANNEL_NAME3_3 = Ch_name3_3
+            var maxTemp3_3 = Math.max(TOAM_HIGHEST_TEMP3_3, TRAM_HIGHEST_TEMP3_3);
+
+            var highestTempElement3_1 = document.querySelector('#highest-temperature3_1');
+            var UniqueZoneName3_1 = document.querySelector('#zone-name3_1');
+            var channel_name3_1 = document.querySelector('#channel_name3_1')
+
+            var highestTempElement3_2 = document.querySelector('#highest-temperature3_2');
+            var UniqueZoneName3_2 = document.querySelector('#zone-name3_2');
+            var channel_name3_2 = document.querySelector('#channel_name3_2')
+
+            var highestTempElement3_3 = document.querySelector('#highest-temperature3_3');
+            var UniqueZoneName3_3 = document.querySelector('#zone-name3_3');
+            var channel_name3_3 = document.querySelector('#channel_name3_3')
+
+            if (UniqueZoneName3_1) {
+                UniqueZoneName3_1.innerText = 'Zone name: ' + ZoneNameTRAM3_1;
+            }
+            if (UniqueZoneName3_1) {
+                UniqueZoneName3_1.innerText += ',' + ZoneNameTOAM3_1;
+            }
+            if (highestTempElement3_1) {
+                highestTempElement3_1.innerText = 'Highest Temperature: ' + maxTemp3_1;
+            }
+            if (channel_name3_1) {
+                channel_name3_1.innerText = 'Channel :' + CHANNEL_NAME3_1;
+            }
+            if (UniqueZoneName3_2) {
+                UniqueZoneName3_2.innerText = 'Zone name: ' + ZoneNameTRAM3_2;
+            }
+            if (UniqueZoneName3_2) {
+                UniqueZoneName3_2.innerText += ', ' + ZoneNameTOAM3_2;
+            }
+            if (highestTempElement3_2) {
+                highestTempElement3_2.innerText = 'Highest Temperature: ' + maxTemp3_2;
+            }
+            if (channel_name3_2) {
+                channel_name3_2.innerText = 'Channel :' + CHANNEL_NAME3_2;
+            }
+            if (UniqueZoneName3_3) {
+                UniqueZoneName3_3.innerText = 'Zone name: ' + ZoneNameTRAM3_3;
+            }
+            if (UniqueZoneName3_3) {
+                UniqueZoneName3_3.innerText += ', ' + ZoneNameTOAM3_3;
+            }
+            if (highestTempElement3_3) {
+                highestTempElement3_3.innerText = 'Highest Temperature: ' + maxTemp3_3;
+            }
+            if (channel_name3_3) {
+                channel_name3_3.innerText = 'Channel :' + CHANNEL_NAME3_3;
+            }
+        }
+        function populateDataForDiv4(Zone_NameTRAM4_1, Zone_NameTOAM4_1, TOAM_H4_1, TRAM_H4_1, Ch_name4_1,
+            Zone_NameTRAM4_2, Zone_NameTOAM4_2, TOAM_H4_2, TRAM_H4_2, Ch_name4_2,
+            Zone_NameTRAM4_3, Zone_NameTOAM4_3, TOAM_H4_3, TRAM_H4_3, Ch_name4_3,
+            Zone_NameTRAM4_4, Zone_NameTOAM4_4, TOAM_H4_4, TRAM_H4_4, Ch_name4_4) {
+            var ZoneNameTRAM4_1 = Zone_NameTRAM4_1
+            var ZoneNameTOAM4_1 = Zone_NameTOAM4_1;
+            var TOAM_HIGHEST_TEMP4_1 = TOAM_H4_1;
+            var TRAM_HIGHEST_TEMP4_1 = TRAM_H4_1;
+            var CHANNEL_NAME4_1 = Ch_name4_1
+            var maxTemp4_1 = Math.max(TOAM_HIGHEST_TEMP4_1, TRAM_HIGHEST_TEMP4_1);
+
+            var ZoneNameTRAM4_2 = Zone_NameTRAM4_2
+            var ZoneNameTOAM4_2 = Zone_NameTOAM4_2;
+            var TOAM_HIGHEST_TEMP4_2 = TOAM_H4_2;
+            var TRAM_HIGHEST_TEMP4_2 = TRAM_H4_2;
+            var CHANNEL_NAME4_2 = Ch_name4_2
+            var maxTemp4_2 = Math.max(TOAM_HIGHEST_TEMP4_2, TRAM_HIGHEST_TEMP4_2);
+
+            var ZoneNameTRAM4_3 = Zone_NameTRAM4_3
+            var ZoneNameTOAM4_3 = Zone_NameTOAM4_3;
+            var TOAM_HIGHEST_TEMP4_3 = TOAM_H4_3;
+            var TRAM_HIGHEST_TEMP4_3 = TRAM_H4_3;
+            var CHANNEL_NAME4_3 = Ch_name4_3
+            var maxTemp4_3 = Math.max(TOAM_HIGHEST_TEMP4_3, TRAM_HIGHEST_TEMP4_3);
+
+            var ZoneNameTRAM4_4 = Zone_NameTRAM4_4
+            var ZoneNameTOAM4_4 = Zone_NameTOAM4_4;
+            var TOAM_HIGHEST_TEMP4_4 = TOAM_H4_4;
+            var TRAM_HIGHEST_TEMP4_4 = TRAM_H4_4;
+            var CHANNEL_NAME4_4 = Ch_name4_4
+            var maxTemp4_4 = Math.max(TOAM_HIGHEST_TEMP4_4, TRAM_HIGHEST_TEMP4_4);
+
+            var highestTempElement4_1 = document.querySelector('#highest-temperature4_1');
+            var UniqueZoneName4_1 = document.querySelector('#zone-name4_1');
+            var channel_name4_1 = document.querySelector('#channel_name4_1')
+
+            var highestTempElement4_2 = document.querySelector('#highest-temperature4_2');
+            var UniqueZoneName4_2 = document.querySelector('#zone-name4_2');
+            var channel_name4_2 = document.querySelector('#channel_name4_2')
+
+            var highestTempElement4_3 = document.querySelector('#highest-temperature4_3');
+            var UniqueZoneName4_3 = document.querySelector('#zone-name4_3');
+            var channel_name4_3 = document.querySelector('#channel_name4_3')
+
+            var highestTempElement4_4 = document.querySelector('#highest-temperature4_4');
+            var UniqueZoneName4_4 = document.querySelector('#zone-name4_4');
+            var channel_name4_4 = document.querySelector('#channel_name4_4')
+
+            if (UniqueZoneName4_1) {
+                UniqueZoneName4_1.innerText = 'Zone name: ' + ZoneNameTRAM4_1;
+            }
+            if (UniqueZoneName4_1) {
+                UniqueZoneName4_1.innerText += ', ' + ZoneNameTOAM4_1;
+            }
+            if (highestTempElement4_1) {
+                highestTempElement4_1.innerText = 'Highest Temperature: ' + maxTemp4_1;
+            }
+            if (channel_name4_1) {
+                channel_name4_1.innerText = 'Channel :' + CHANNEL_NAME4_1;
+            }
+            if (UniqueZoneName4_2) {
+                UniqueZoneName4_2.innerText = 'Zone name: ' + ZoneNameTRAM4_2;
+            }
+            if (UniqueZoneName4_2) {
+                UniqueZoneName4_2.innerText += ', ' + ZoneNameTOAM4_2;
+            }
+            if (highestTempElement4_2) {
+                highestTempElement4_2.innerText = 'Highest Temperature: ' + maxTemp4_2;
+            }
+            if (channel_name4_2) {
+                channel_name4_2.innerText = 'Channel :' + CHANNEL_NAME4_2;
+            }
+            if (UniqueZoneName4_3) {
+                UniqueZoneName4_3.innerText = 'Zone name: ' + ZoneNameTRAM4_3;
+            }
+            if (UniqueZoneName4_3) {
+                UniqueZoneName4_3.innerText += ', ' + ZoneNameTOAM4_3;
+            }
+            if (highestTempElement4_3) {
+                highestTempElement4_3.innerText = 'Highest Temperature: ' + maxTemp4_3;
+            }
+            if (channel_name4_3) {
+                channel_name4_3.innerText = 'Channel :' + CHANNEL_NAME4_3;
+            }
+            if (UniqueZoneName4_4) {
+                UniqueZoneName4_4.innerText = 'Zone name: ' + ZoneNameTRAM4_4;
+            }
+            if (UniqueZoneName4_4) {
+                UniqueZoneName4_4.innerText += ', ' + ZoneNameTOAM4_4;
+            }
+            if (highestTempElement4_4) {
+                highestTempElement4_4.innerText = 'Highest Temperature: ' + maxTemp4_4;
+            }
+            if (channel_name4_4) {
+                channel_name4_4.innerText = 'Channel :' + CHANNEL_NAME4_4;
+            }
+        }
+        // Call the appropriate function based on the channel_len value
+        var channel_len = localStorage.getItem("channel_len");
+        // console.log(channel_len)
+        if (channel_len === '1') {
+            document.getElementById("Div1").style.display = "flex";
+            populateDataForDiv1();
+        } else if (channel_len === '2') {
+            document.getElementById("Div2").style.display = "flex";
+            populateDataForDiv2();
+        } else if (channel_len === '3') {
+            document.getElementById("Div3").style.display = "flex";
+            populateDataForDiv3();
+        } else if (channel_len === '4') {
+            document.getElementById("Div4").style.display = "flex";
+            populateDataForDiv4();
+        }
+    </script>
+    <script>
+        function setinterval_function() {
+            $.ajax({
+                url: '/graph_data/', // Replace with your Django view's URL
+                method: "GET",
+                dataType: 'json',
+                success: function (response) {
+                    var zoneConfigData = response.zonedata
+                    var channel_data = response.channel_data
+                    var All_channels = response.All_channels
+                    var Channel_verification = []
+
+                    var tempOrangeAlarmMaxList_ch1 = []
+                    var cloned_tempOrangeAlarmMaxList_ch1 = tempOrangeAlarmMaxList_ch1.slice();
+                    // console.log(cloned_tempOrangeAlarmMaxList_ch1)
+                    var tempOrangeAlarmMinList_ch1 = []
+                    var cloned_tempOrangeAlarmMinList_ch1 = tempOrangeAlarmMinList_ch1.slice();
+
+                    var tempRedAlarmMaxList_ch1 = []
+                    var cloned_tempRedAlarmMaxList_ch1 = tempRedAlarmMaxList_ch1.slice();
+
+                    var tempRedAlarmMinList_ch1 = []
+                    var cloned_tempRedAlarmMinList_ch1 = tempRedAlarmMinList_ch1.slice();
+
+                    var tempOrangeAlarmMaxList_ch2 = []
+                    var cloned_tempOrangeAlarmMaxList_ch2 = tempOrangeAlarmMaxList_ch2.slice();
+
+                    var tempOrangeAlarmMinList_ch2 = []
+                    var cloned_tempOrangeAlarmMinList_ch2 = tempOrangeAlarmMinList_ch2.slice();
+
+                    var tempRedAlarmMaxList_ch2 = []
+                    var cloned_tempRedAlarmMaxList_ch2 = tempRedAlarmMaxList_ch2.slice();
+
+                    var tempRedAlarmMinList_ch2 = []
+                    var cloned_tempRedAlarmMinList_ch2 = tempRedAlarmMinList_ch2.slice();
+
+                    var tempOrangeAlarmMaxList_ch3 = []
+                    var cloned_tempOrangeAlarmMaxList_ch3 = tempOrangeAlarmMaxList_ch3.slice();
+
+                    var tempOrangeAlarmMinList_ch3 = []
+                    var cloned_tempOrangeAlarmMinList_ch3 = tempOrangeAlarmMinList_ch3.slice();
+
+                    var tempRedAlarmMaxList_ch3 = []
+                    var cloned_tempRedAlarmMaxList_ch3 = tempRedAlarmMaxList_ch3.slice();
+
+                    var tempRedAlarmMinList_ch3 = []
+                    var cloned_tempRedAlarmMinList_ch3 = tempRedAlarmMinList_ch3.slice();
+
+                    var tempOrangeAlarmMaxList_ch4 = []
+                    var cloned_tempOrangeAlarmMaxList_ch4 = tempOrangeAlarmMaxList_ch4.slice();
+
+                    var tempOrangeAlarmMinList_ch4 = []
+                    var cloned_tempOrangeAlarmMinList_ch4 = tempOrangeAlarmMinList_ch4.slice();
+
+                    var tempRedAlarmMaxList_ch4 = []
+                    var cloned_tempRedAlarmMaxList_ch4 = tempRedAlarmMaxList_ch4.slice();
+
+                    var tempRedAlarmMinList_ch4 = []
+                    var cloned_tempRedAlarmMinList_ch4 = tempRedAlarmMinList_ch4.slice();
+
+
+                    for (var i = 0; i < All_channels.length; i++) {
+                        // console.log("----",All_channels.length)
+                        for (var j = 0; j < All_channels[i].length; j++) {
+                            var channel_validation = All_channels[i].length
+                            // console.log("----",channel_validation)
+                            var temp_validation = All_channels[i][j].temprature_curve_y_axis
+                            if (i === 0) {
+                                var channelNumOneData = zoneConfigData.filter(function (item) {
+                                    return item.channel_num === '1';
+                                });
+                                // console.log(channelNumOneData)
+                                for (var k = 1; k < channelNumOneData.length; k++) {
+                                    var selectedData = [
+                                        channelNum = channelNumOneData[k].channel_num,
+                                        zone_name = channelNumOneData[k].zone_name,
+                                        start_dist = channelNumOneData[k].start_dist,
+                                        end_dist = channelNumOneData[k].end_dist,
+                                    ];
+                                    var selectedData1 = {
+                                        Zone_name: channelNumOneData[k].zone_name,
+                                        Start_dist: channelNumOneData[k].start_dist,
+                                        End_dist: channelNumOneData[k].end_dist,
+                                        Temprature: temp_validation,
+
+                                    }
+
+                                    if (temp_validation >= channelNumOneData[k].temp_orange_alarm_max) {
+                                        tempOrangeAlarmMaxList_ch1.push(selectedData, Temp = channelNumOneData[k].temp_orange_alarm_max, y_temp = temp_validation)
+                                        Channel_verification.push(channelNumOneData[k].channel_num,)
+                                        cloned_tempOrangeAlarmMaxList_ch1.push(selectedData1, "***************************************")
+                                        localStorage.setItem('cloned_tempOrangeAlarmMaxList_ch1_showmore', JSON.stringify(cloned_tempOrangeAlarmMaxList_ch1))
+                                    }
+                                    if (temp_validation <= channelNumOneData[k].temp_orange_alarm_min) {
+                                        tempOrangeAlarmMinList_ch1.push(selectedData, Temp = channelNumOneData[k].temp_orange_alarm_min, y_temp = temp_validation)
+                                        Channel_verification.push(channelNumOneData[k].channel_num,)
+
+                                    }
+                                    if (temp_validation >= channelNumOneData[k].temp_red_alarm_max) {
+                                        tempRedAlarmMaxList_ch1.push(selectedData, Temp = channelNumOneData[k].temp_red_alarm_max, y_temp = temp_validation)
+                                        cloned_tempRedAlarmMaxList_ch1.push(selectedData1, "***************************************")
+                                        Channel_verification.push(channelNumOneData[k].channel_num,)
+                                        localStorage.setItem('cloned_tempRedAlarmMaxList_ch1_showmore', JSON.stringify(cloned_tempRedAlarmMaxList_ch1));
+                                        // console.log("------------", cloned_tempRedAlarmMaxList_ch1)
+                                    }
+                                    if (temp_validation >= channelNumOneData[k].temp_red_alarm_min) {
+                                        tempRedAlarmMinList_ch1.push(selectedData, Temp = channelNumOneData[k].temp_red_alarm_min, y_temp = temp_validation)
+                                        localStorage.setItem('tempRedAlarmMinList_ch1', JSON.stringify(tempRedAlarmMinList_ch1));
+                                        // console.log("------------", tempRedAlarmMinList_ch1)
+                                        Channel_verification.push(channelNumOneData[k].channel_num,)
+                                    }
+                                }
+                            }
+                            if (i === 1) {
+
+                                var channelNumTwoData = zoneConfigData.filter(function (item) {
+                                    return item.channel_num === '2';
+
+                                });
+                                // console.log("channelNumTwoData",channelNumTwoData)
+                                for (var k = 1; k < channelNumTwoData.length; k++) {
+                                    var selectedData = [
+                                        channelNum = channelNumTwoData[k].channel_num,
+                                        zone_name = channelNumTwoData[k].zone_name,
+                                        start_dist = channelNumTwoData[k].start_dist,
+                                        end_dist = channelNumTwoData[k].end_dist,
+                                    ];
+                                    var selectedData1 = {
+                                        Zone_name: channelNumTwoData[k].zone_name,
+                                        Start_dist: channelNumTwoData[k].start_dist,
+                                        End_dist: channelNumTwoData[k].end_dist,
+                                        Temprature: temp_validation,
+
+                                    }
+                                    if (temp_validation >= channelNumTwoData[k].temp_orange_alarm_max) {
+                                        tempOrangeAlarmMaxList_ch2.push(selectedData, Temp = channelNumTwoData[k].temp_orange_alarm_max, y_temp = temp_validation)
+                                        cloned_tempOrangeAlarmMaxList_ch2.push(selectedData1, "***************************************")
+                                        Channel_verification.push(channelNumTwoData[k].channel_num,)
+                                        localStorage.setItem('cloned_tempOrangeAlarmMaxList_ch2_showmore', JSON.stringify(cloned_tempOrangeAlarmMaxList_ch2));
+                                    }
+                                    if (temp_validation <= channelNumTwoData[k].temp_orange_alarm_min) {
+                                        tempOrangeAlarmMinList_ch2.push(selectedData, Temp = channelNumTwoData[k].temp_orange_alarm_min, y_temp = temp_validation)
+                                        localStorage.setItem('tempOrangeAlarmMinList_ch2', JSON.stringify(tempOrangeAlarmMinList_ch2));
+                                        Channel_verification.push(channelNumTwoData[k].channel_num,)
+                                    }
+                                    if (temp_validation >= channelNumTwoData[k].temp_red_alarm_max) {
+                                        tempRedAlarmMaxList_ch2.push(selectedData, Temp = channelNumTwoData[k].temp_red_alarm_max, y_temp = temp_validation)
+                                        cloned_tempRedAlarmMaxList_ch2.push(selectedData1, "***************************************")
+                                        Channel_verification.push(channelNumTwoData[k].channel_num,)
+                                        localStorage.setItem('cloned_tempRedAlarmMaxList_ch2_showmore', JSON.stringify(cloned_tempRedAlarmMaxList_ch2));
+
+                                    }
+                                    if (temp_validation >= channelNumTwoData[k].temp_red_alarm_min) {
+                                        tempRedAlarmMinList_ch2.push(selectedData, Temp = channelNumTwoData[k].temp_red_alarm_min, y_temp = temp_validation)
+                                        localStorage.setItem('tempRedAlarmMinList_ch2', JSON.stringify(tempRedAlarmMinList_ch2));
+                                        Channel_verification.push(channelNumTwoData[k].channel_num,)
+
+                                    }
+                                }
+                            }
+                            if (i === 2) {
+                                var channelNumThreeData = zoneConfigData.filter(function (item) {
+                                    return item.channel_num === '3';
+                                });
+                                for (var k = 1; k < channelNumThreeData.length; k++) {
+                                    var selectedData = [
+                                        channelNum = channelNumThreeData[k].channel_num,
+                                        // console.log(channelNum),
+                                        zone_name = channelNumThreeData[k].zone_name,
+                                        // console.log(zone_name),
+                                        start_dist = channelNumThreeData[k].start_dist,
+                                        end_dist = channelNumThreeData[k].end_dist,
+                                    ];
+                                    var selectedData1 = {
+                                        Zone_name: channelNumThreeData[k].zone_name,
+                                        Start_dist: channelNumThreeData[k].start_dist,
+                                        End_dist: channelNumThreeData[k].end_dist,
+                                        Temprature: temp_validation,
+
+                                    }
+                                    if (temp_validation >= channelNumThreeData[k].temp_orange_alarm_max) {
+                                        tempOrangeAlarmMaxList_ch3.push(selectedData, Temp = channelNumThreeData[k].temp_orange_alarm_max, y_temp = temp_validation)
+                                        Channel_verification.push(channelNumThreeData[k].channel_num,)
+                                        cloned_tempOrangeAlarmMaxList_ch3.push(selectedData1, "***************************************")
+                                        localStorage.setItem('cloned_tempOrangeAlarmMaxList_ch3_showmore', JSON.stringify(cloned_tempRedAlarmMaxList_ch2));
+                                    }
+                                    if (temp_validation <= channelNumThreeData[k].temp_orange_alarm_min) {
+                                        tempOrangeAlarmMinList_ch3.push(selectedData, Temp = channelNumThreeData[k].temp_orange_alarm_min, y_temp = temp_validation)
+                                        localStorage.setItem('tempOrangeAlarmMinList_ch3', JSON.stringify(tempOrangeAlarmMinList_ch3));
+                                        Channel_verification.push(channelNumThreeData[k].channel_num,)
+                                    }
+                                    if (temp_validation >= channelNumThreeData[k].temp_red_alarm_max) {
+                                        tempRedAlarmMaxList_ch3.push(selectedData, Temp = channelNumThreeData[k].temp_red_alarm_max, y_temp = temp_validation)
+                                        Channel_verification.push(channelNumThreeData[k].channel_num,)
+                                        cloned_tempRedAlarmMaxList_ch3.push(selectedData1, "***************************************")
+                                        localStorage.setItem('cloned_tempRedAlarmMaxList_ch3_showmore', JSON.stringify(cloned_tempRedAlarmMaxList_ch3));
+                                    }
+                                    if (temp_validation >= channelNumThreeData[k].temp_red_alarm_min) {
+                                        tempRedAlarmMinList_ch3.push(selectedData, Temp = channelNumThreeData[k].temp_red_alarm_min, y_temp = temp_validation)
+                                        localStorage.setItem('tempRedAlarmMinList_ch3', JSON.stringify(tempRedAlarmMinList_ch3));
+                                        Channel_verification.push(channelNumThreeData[k].channel_num,)
+                                    }
+                                }
+                            }
+                            if (i === 3) {
+                                var channelNumFourData = zoneConfigData.filter(function (item) {
+                                    return item.channel_num === '4';
+                                });
+                                for (var k = 1; k < channelNumFourData.length; k++) {
+                                    var selectedData = [
+                                        channelNum = channelNumFourData[k].channel_num,
+                                        zone_name = channelNumFourData[k].zone_name,
+                                        start_dist = channelNumFourData[k].start_dist,
+                                        end_dist = channelNumFourData[k].end_dist,
+                                    ];
+                                    var selectedData1 = {
+                                        Zone_name: channelNumFourData[k].zone_name,
+                                        Start_dist: channelNumFourData[k].start_dist,
+                                        End_dist: channelNumFourData[k].end_dist,
+                                        Temprature: temp_validation,
+
+                                    }
+                                    if (temp_validation >= channelNumFourData[k].temp_orange_alarm_max) {
+                                        tempOrangeAlarmMaxList_ch4.push(selectedData, Temp = channelNumFourData[k].temp_orange_alarm_max, y_temp = temp_validation)
+                                        Channel_verification.push(channelNumFourData[k].channel_num,)
+                                        cloned_tempOrangeAlarmMaxList_ch4.push(selectedData1, "***************************************")
+                                        localStorage.setItem('cloned_tempOrangeAlarmMaxList_ch4_showmore', JSON.stringify(cloned_tempOrangeAlarmMaxList_ch4));
+                                    }
+                                    if (temp_validation <= channelNumFourData[k].temp_orange_alarm_min) {
+                                        tempOrangeAlarmMinList_ch4.push(selectedData, Temp = channelNumFourData[k].temp_orange_alarm_min, y_temp = temp_validation)
+                                        localStorage.setItem('tempOrangeAlarmMinList_ch4', JSON.stringify(tempOrangeAlarmMinList_ch4));
+                                        Channel_verification.push(channelNumFourData[k].channel_num,)
+                                    }
+                                    if (temp_validation >= channelNumFourData[k].temp_red_alarm_max) {
+                                        tempRedAlarmMaxList_ch4.push(selectedData, Temp = channelNumFourData[k].temp_red_alarm_max, y_temp = temp_validation)
+                                        Channel_verification.push(channelNumFourData[k].channel_num,)
+                                        cloned_tempRedAlarmMaxList_ch4.push(selectedData1, "***************************************")
+                                        localStorage.setItem('cloned_tempRedAlarmMaxList_ch4_showmore', JSON.stringify(cloned_tempRedAlarmMaxList_ch4));
+                                    }
+                                    if (temp_validation >= channelNumFourData[k].temp_red_alarm_min) {
+                                        tempRedAlarmMinList_ch4.push(selectedData, Temp = channelNumFourData[k].temp_red_alarm_min, y_temp = temp_validation)
+                                        localStorage.setItem('tempRedAlarmMinList_ch4', JSON.stringify(tempRedAlarmMinList_ch4));
+                                        Channel_verification.push(channelNumFourData[k].channel_num,)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Channel_verification=[]
+                    //===========================================================================================================================================================
+                    Channel_verification.sort(function (a, b) {
+                        return a.channel_num - b.channel_num;
+                    });
+
+                    // Now, Channel_verification is sorted based on channel_num
+                    var uniqueChannelVerification = [...new Set(Channel_verification)];
+                    var channel_len = uniqueChannelVerification.length
+                    // Log the array with unique values
+                    // console.log("Unique Channel_verification", uniqueChannelVerification);
+                    localStorage.setItem("uniqueChannelVerification", uniqueChannelVerification);
+                    localStorage.setItem("channel_len", channel_len);
+                    console.log(channel_len)
+                    //====================================================================================================================================
+                    var uniqueZoneNamesCH1_1 = new Set();
+
+                    // Iterate through the entire array and add zone names to the Set
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i++) {
+                        // Check if the element is an array and has a zone name (assuming zone names are strings)
+                        if (Array.isArray(tempOrangeAlarmMaxList_ch1[i]) && tempOrangeAlarmMaxList_ch1[i].length > 1) {
+                            uniqueZoneNamesCH1_1.add(tempOrangeAlarmMaxList_ch1[i][1]);
+                        }
+                    }
+                    // Convert the Set back to an array if needed
+                    var uniqueZoneNamesArrayCH1_1 = Array.from(uniqueZoneNamesCH1_1);
+                    // var resultString = uniqueZoneNamesArrayCH1_1.join(', ');
+                    // Now, uniqueZoneNamesArrayCH1_1 contains unique zone names
+                    // console.log("uniqueZoneNamesCH1_1:", uniqueZoneNamesArrayCH1_1);
+                    localStorage.setItem('uniqueZoneNamesArrayCH1_1', JSON.stringify(uniqueZoneNamesArrayCH1_1));
+                    //=======================================================================================================================
+                    var uniqueZoneNamesCH1_2 = new Set();
+
+                    // Iterate through the entire array and add zone names to the Set
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i++) {
+                        // Check if the element is an array and has a zone name (assuming zone names are strings)
+                        if (Array.isArray(tempOrangeAlarmMaxList_ch1[i]) && tempOrangeAlarmMaxList_ch1[i].length > 1) {
+                            uniqueZoneNamesCH1_2.add(tempOrangeAlarmMaxList_ch1[i][1]);
+                        }
+                    }
+                    // Convert the Set back to an array if needed
+                    var uniqueZoneNamesArrayCH1_2 = Array.from(uniqueZoneNamesCH1_2);
+                    // Now, uniqueZoneNamesArrayCH1_2 contains unique zone names
+                    // console.log("uniqueZoneNamesCH1_2:", uniqueZoneNamesArrayCH1_2);
+                    localStorage.setItem('uniqueZoneNamesArrayCH1_2', JSON.stringify(uniqueZoneNamesArrayCH1_2));
+                    //=======================================================================================================================
+                    var TOAM_HIGHEST_TEMPCH1 = -Infinity;
+                    // Iterate through the array
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i += 2) {
+                        var y_Temp = parseFloat(tempOrangeAlarmMaxList_ch1[i]);
+                        // Check if the current y_Temp is higher than the stored highest value
+                        if (!isNaN(y_Temp) && y_Temp > TOAM_HIGHEST_TEMPCH1) {
+                            TOAM_HIGHEST_TEMPCH1 = y_Temp;
+                        }
+                    }
+                    // Now TOAM_HIGHEST_TEMPCH1 contains the highest temperature value
+                    // console.log("Highest Y Temp:", t_temp);
+                    localStorage.setItem('TOAM_HIGHEST_TEMPCH1', JSON.stringify(TOAM_HIGHEST_TEMPCH1));
+                    // ====================================================================================================================================
+
+                    var TRAM_HIGHEST_TEMPCH1 = -Infinity;
+                    // Iterate through the array
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i += 2) {
+                        var y_Temp = parseFloat(tempOrangeAlarmMaxList_ch1[i]);
+                        // Check if the current y_Temp is higher than the stored highest value
+                        if (!isNaN(y_Temp) && y_Temp > TRAM_HIGHEST_TEMPCH1) {
+                            TRAM_HIGHEST_TEMPCH1 = y_Temp;
+                        }
+                    }
+                    // Now TRAM_HIGHEST_TEMPCH1 contains the highest temperature value
+                    // console.log("Highest Y Temp:", TRAM_HIGHEST_TEMPCH1);
+                    localStorage.setItem('TRAM_HIGHEST_TEMPCH1', JSON.stringify(TRAM_HIGHEST_TEMPCH1));
+                    //=================================================================================================================================================
+                    var uniqueZoneNamesCH2_1 = new Set();
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch2.length; i++) {
+                        if (Array.isArray(tempOrangeAlarmMaxList_ch2[i]) && tempOrangeAlarmMaxList_ch2[i].length > 1) {
+                            uniqueZoneNamesCH2_1.add(tempOrangeAlarmMaxList_ch2[i][1]);
+                        }
+                    }
+                    var uniqueZoneNamesCH2_1Array = Array.from(uniqueZoneNamesCH2_1);
+                    // console.log("uniqueZoneNamesCH2_1:", uniqueZoneNamesCH2_1Array);
+                    localStorage.setItem('uniqueZoneNamesCH2_1Array', JSON.stringify(uniqueZoneNamesCH2_1Array));
+                    //=======================================================================================================================
+                    var uniqueZoneNamesCH2_2 = new Set();
+
+                    for (var i = 0; i < tempRedAlarmMaxList_ch2.length; i++) {
+                        if (Array.isArray(tempRedAlarmMaxList_ch2[i]) && tempRedAlarmMaxList_ch2[i].length > 1) {
+                            uniqueZoneNamesCH2_2.add(tempRedAlarmMaxList_ch2[i][1]);
+                        }
+                    }
+                    var uniqueZoneNamesCH2_2Array = Array.from(uniqueZoneNamesCH2_2);
+                    // console.log("uniqueZoneNamesCH2_2:", uniqueZoneNamesCH2_2Array);
+                    localStorage.setItem('uniqueZoneNamesCH2_2Array', JSON.stringify(uniqueZoneNamesCH2_2Array));
+                    //=======================================================================================================================
+                    var TOAM_HIGHEST_TEMPCH2 = -Infinity;
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch2.length; i += 2) {
+                        var y_Temp = parseFloat(tempOrangeAlarmMaxList_ch2[i]);
+                        if (!isNaN(y_Temp) && y_Temp > TOAM_HIGHEST_TEMPCH2) {
+                            TOAM_HIGHEST_TEMPCH2 = y_Temp;
+                        }
+                    }
+                    // console.log("Highest Y Temp:", y_Temp);
+                    localStorage.setItem('TOAM_HIGHEST_TEMPCH2', JSON.stringify(TOAM_HIGHEST_TEMPCH2));
+                    // ====================================================================================================================================
+
+                    var TRAM_HIGHEST_TEMPCH2 = -Infinity;
+                    // Iterate through the array
+                    for (var i = 0; i < tempRedAlarmMaxList_ch2.length; i += 2) {
+                        var y_Temp = parseFloat(tempRedAlarmMaxList_ch2[i]);
+                        // Check if the current y_Temp is higher than the stored highest value
+                        if (!isNaN(y_Temp) && y_Temp > TRAM_HIGHEST_TEMPCH2) {
+                            TRAM_HIGHEST_TEMPCH2 = y_Temp;
+                        }
+                    }
+                    localStorage.setItem('TRAM_HIGHEST_TEMPCH2', JSON.stringify(TRAM_HIGHEST_TEMPCH2));
+                    //===========================================================================================================================================================
+                    var uniqueZoneNamesCH3_1 = new Set();
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch3.length; i++) {
+                        if (Array.isArray(tempOrangeAlarmMaxList_ch3[i]) && tempOrangeAlarmMaxList_ch3[i].length > 1) {
+                            uniqueZoneNamesCH3_1.add(tempOrangeAlarmMaxList_ch3[i][1]);
+                        }
+                    }
+                    var uniqueZoneNamesCH3_1Array = Array.from(uniqueZoneNamesCH3_1);
+                    // console.log("uniqueZoneNamesCH3_1:", uniqueZoneNamesCH3_1Array);
+                    localStorage.setItem('uniqueZoneNamesCH3_1Array', JSON.stringify(uniqueZoneNamesCH3_1Array));
+                    //=======================================================================================================================
+                    var uniqueZoneNamesCH3_2 = new Set();
+
+                    for (var i = 0; i < tempRedAlarmMaxList_ch3.length; i++) {
+                        if (Array.isArray(tempRedAlarmMaxList_ch3[i]) && tempRedAlarmMaxList_ch3[i].length > 1) {
+                            uniqueZoneNamesCH3_2.add(tempRedAlarmMaxList_ch3[i][1]);
+                        }
+                    }
+                    var uniqueZoneNamesCH3_2Array = Array.from(uniqueZoneNamesCH3_2);
+                    // console.log("uniqueZoneNamesCH3_2:", uniqueZoneNamesCH3_2Array);
+                    localStorage.setItem('uniqueZoneNamesCH3_2Array', JSON.stringify(uniqueZoneNamesCH3_2Array));
+                    //=======================================================================================================================
+                    var TOAM_HIGHEST_TEMPCH3 = -Infinity;
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch3.length; i += 2) {
+                        var y_Temp = parseFloat(tempOrangeAlarmMaxList_ch3[i]);
+                        if (!isNaN(y_Temp) && y_Temp > TOAM_HIGHEST_TEMPCH3) {
+                            TOAM_HIGHEST_TEMPCH3 = y_Temp;
+                        }
+                    }
+                    // console.log("Highest Y Temp:", TOAM_HIGHEST_TEMPCH3);
+                    localStorage.setItem('TOAM_HIGHEST_TEMPCH3', JSON.stringify(TOAM_HIGHEST_TEMPCH3));
+                    // ====================================================================================================================================
+
+                    var TRAM_HIGHEST_TEMPCH3 = -Infinity;
+                    // Iterate through the array
+                    for (var i = 0; i < tempRedAlarmMaxList_ch3.length; i += 2) {
+                        var y_Temp = parseFloat(tempRedAlarmMaxList_ch3[i]);
+                        // Check if the current y_Temp is higher than the stored highest value
+                        if (!isNaN(y_Temp) && y_Temp > TRAM_HIGHEST_TEMPCH3) {
+                            TRAM_HIGHEST_TEMPCH3 = y_Temp;
+                        }
+                    }
+                    localStorage.setItem('TRAM_HIGHEST_TEMPCH3', JSON.stringify(TRAM_HIGHEST_TEMPCH3));
+                    //===========================================================================================================================================================
+                    var uniqueZoneNamesCH4_1 = new Set();
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch4.length; i++) {
+                        if (Array.isArray(tempOrangeAlarmMaxList_ch4[i]) && tempOrangeAlarmMaxList_ch4[i].length > 1) {
+                            uniqueZoneNamesCH4_1.add(tempOrangeAlarmMaxList_ch4[i][1]);
+                        }
+                    }
+                    var uniqueZoneNamesCH4_1Array = Array.from(uniqueZoneNamesCH4_1);
+                    // console.log("uniqueZoneNamesCH4_1:", uniqueZoneNamesCH4_1Array);
+                    localStorage.setItem('uniqueZoneNamesCH4_1Array', JSON.stringify(uniqueZoneNamesCH4_1Array));
+                    //=======================================================================================================================
+                    var uniqueZoneNamesCH4_2 = new Set();
+
+                    for (var i = 0; i < tempRedAlarmMaxList_ch4.length; i++) {
+                        if (Array.isArray(tempRedAlarmMaxList_ch4[i]) && tempRedAlarmMaxList_ch4[i].length > 1) {
+                            uniqueZoneNamesCH4_2.add(tempRedAlarmMaxList_ch4[i][1]);
+                        }
+                    }
+                    var uniqueZoneNamesCH4_2Array = Array.from(uniqueZoneNamesCH4_2);
+                    // console.log("uniqueZoneNamesCH4_2:", uniqueZoneNamesCH4_2Array);
+                    localStorage.setItem('uniqueZoneNamesCH4_2Array', JSON.stringify(uniqueZoneNamesCH4_2Array));
+                    //=======================================================================================================================
+                    var TOAM_HIGHEST_TEMPCH4 = -Infinity;
+                    for (var i = 0; i < tempOrangeAlarmMaxList_ch4.length; i += 2) {
+                        var y_Temp = parseFloat(tempOrangeAlarmMaxList_ch4[i]);
+                        if (!isNaN(y_Temp) && y_Temp > TOAM_HIGHEST_TEMPCH4) {
+                            TOAM_HIGHEST_TEMPCH4 = y_Temp;
+                        }
+                    }
+                    // console.log("Highest Y Temp:", TOAM_HIGHEST_TEMPCH4);
+                    localStorage.setItem('TOAM_HIGHEST_TEMPCH4', JSON.stringify(TOAM_HIGHEST_TEMPCH4));
+                    // ====================================================================================================================================
+
+                    var TRAM_HIGHEST_TEMPCH4 = -Infinity;
+                    // Iterate through the array
+                    for (var i = 0; i < tempRedAlarmMaxList_ch4.length; i += 2) {
+                        var y_Temp = parseFloat(tempRedAlarmMaxList_ch4[i]);
+                        // Check if the current y_Temp is higher than the stored highest value
+                        if (!isNaN(y_Temp) && y_Temp > TRAM_HIGHEST_TEMPCH4) {
+                            TRAM_HIGHEST_TEMPCH4 = y_Temp;
+                        }
+                    }
+                    localStorage.setItem('TRAM_HIGHEST_TEMPCH4', JSON.stringify(TRAM_HIGHEST_TEMPCH4));
+
+                    // ================================================================+++++++++++++++++++++++++++++++++++++++
+
+                    if (channel_len == '1') {
+                        if (uniqueChannelVerification.includes('1')) {
+                            // console.log('=============',uniqueZoneNamesCH1_1)
+                            populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesArrayCH1_1, Zone_NameTOAM = uniqueZoneNamesArrayCH1_2,
+                                TOAM_H = TOAM_HIGHEST_TEMPCH1, TRAM_H = TRAM_HIGHEST_TEMPCH1, Ch_name = "1")
+                        }
+                        else if (uniqueChannelVerification.includes('2')) {
+                            populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesCH2_2Array, Zone_NameTOAM = uniqueZoneNamesCH2_1Array,
+                                TOAM_H = TOAM_HIGHEST_TEMPCH2, TRAM_H = TRAM_HIGHEST_TEMPCH2, Ch_name = "2")
+                        }
+                        else if (uniqueChannelVerification.includes('3')) {
+                            populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesCH3_1Array, Zone_NameTOAM = uniqueZoneNamesCH3_1Array,
+                                TOAM_H = TOAM_HIGHEST_TEMPCH3, TRAM_H = TRAM_HIGHEST_TEMPCH3, Ch_name = "3")
+                        }
+                        else if (uniqueChannelVerification.includes('4')) {
+                            populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesCH4_2Array, Zone_NameTOAM = uniqueZoneNamesCH4_1Array,
+                                TOAM_H = TOAM_HIGHEST_TEMPCH4, TRAM_H = TRAM_HIGHEST_TEMPCH4, Ch_name = "4")
+                        }
+                    }
+                    else if (channel_len == '2') {
+                        console.log(uniqueChannelVerification)
+                        if (uniqueChannelVerification.includes('1') && uniqueChannelVerification.includes('2')) {
+                            populateDataForDiv2(response.Zone_NameTRAM2_1 = uniqueZoneNamesArrayCH1_2, Zone_NameTOAM2_1 = uniqueZoneNamesArrayCH1_1,
+                                TOAM_H2_1 = TOAM_HIGHEST_TEMPCH1, TRAM_H2_1 = TRAM_HIGHEST_TEMPCH1, Ch_name2_1 = "1", Zone_NameTRAM2_2 = uniqueZoneNamesCH2_2Array,
+                                Zone_NameTOAM2_2 = uniqueZoneNamesCH2_1Array, TOAM_H2_2 = TOAM_HIGHEST_TEMPCH2, TRAM_H2_2 = TRAM_HIGHEST_TEMPCH2, Ch_name2_2 = "2")
+                            console.log(response.Zone_NameTRAM2_1)
+                        }
+                        else if (uniqueChannelVerification.includes('2') && uniqueChannelVerification.includes('3')) {
+                            populateDataForDiv2(response.Zone_NameTRAM2_1 = uniqueZoneNamesCH2_1Array, Zone_NameTOAM2_1 = uniqueZoneNamesCH2_2Array,
+                                TOAM_H2_1 = TOAM_HIGHEST_TEMPCH2, TRAM_H2_1 = TRAM_HIGHEST_TEMPCH2, Ch_name2_1 = "2", Zone_NameTRAM2_2 = uniqueZoneNamesCH3_1Array,
+                                Zone_NameTOAM2_2 = uniqueZoneNamesCH3_2Array, TOAM_H2_2 = TOAM_HIGHEST_TEMPCH3, TRAM_H2_2 = TRAM_HIGHEST_TEMPCH3, Ch_name2_2 = "3")
+                        }
+                        else if (uniqueChannelVerification.includes('3') && uniqueChannelVerification.includes('4')) {
+                            populateDataForDiv2(response.Zone_NameTRAM2_1 = uniqueZoneNamesCH3_1Array, Zone_NameTOAM2_1 = uniqueZoneNamesCH3_2Array,
+                                TOAM_H2_1 = TOAM_HIGHEST_TEMPCH3, TRAM_H2_1 = TRAM_HIGHEST_TEMPCH3, Ch_name2_1 = "4", Zone_NameTRAM2_2 = uniqueZoneNamesCH4_2Array,
+                                Zone_NameTOAM2_2 = uniqueZoneNamesCH4_1Array, TOAM_H2_2 = TOAM_HIGHEST_TEMPCH4, TRAM_H2_2 = TRAM_HIGHEST_TEMPCH4, Ch_name2_2 = "3")
+                        }
+                        else if (uniqueChannelVerification.includes('4') && uniqueChannelVerification.includes('1')) {
+                            populateDataForDiv2(response.Zone_NameTRAM2_1 = uniqueZoneNamesCH4_2Array, Zone_NameTOAM2_1 = uniqueZoneNamesCH4_1Array,
+                                TOAM_H2_1 = TOAM_HIGHEST_TEMPCH4, TRAM_H2_1 = TRAM_HIGHEST_TEMPCH4, Ch_name2_1 = "1", Zone_NameTRAM2_2 = uniqueZoneNamesArrayCH1_2,
+                                Zone_NameTOAM2_2 = uniqueZoneNamesArrayCH1_1, TOAM_H2_2 = TOAM_HIGHEST_TEMPCH1, TRAM_H2_2 = TRAM_HIGHEST_TEMPCH1, Ch_name2_2 = "4")
+                        }
+                        else if (uniqueChannelVerification.includes('4') && uniqueChannelVerification.includes('2')) {
+                            populateDataForDiv2(response.Zone_NameTRAM2_1 = uniqueZoneNamesCH4_2Array, Zone_NameTOAM2_1 = uniqueZoneNamesCH4_2Array,
+                                TOAM_H2_1 = TOAM_HIGHEST_TEMPCH4, TRAM_H2_1 = TRAM_HIGHEST_TEMPCH4, Ch_name2_1 = "2", Zone_NameTRAM2_2 = uniqueZoneNamesCH2_1Array,
+                                Zone_NameTOAM2_2 = uniqueZoneNamesCH2_2Array, TOAM_H2_2 = TOAM_HIGHEST_TEMPCH2, TRAM_H2_2 = TRAM_HIGHEST_TEMPCH2, Ch_name2_2 = "4")
+                        }
+                        else if (uniqueChannelVerification.includes('3') && uniqueChannelVerification.includes('1')) {
+                            populateDataForDiv2(response.Zone_NameTRAM2_1 = uniqueZoneNamesCH3_1Array, Zone_NameTOAM2_1 = uniqueZoneNamesCH3_2Array,
+                                TOAM_H2_1 = TOAM_HIGHEST_TEMPCH3, TRAM_H2_1 = TRAM_HIGHEST_TEMPCH3, Ch_name2_1 = "1", Zone_NameTRAM2_2 = uniqueZoneNamesArrayCH1_2,
+                                Zone_NameTOAM2_2 = uniqueZoneNamesArrayCH1_1, TOAM_H2_2 = TOAM_HIGHEST_TEMPCH1, TRAM_H2_2 = TRAM_HIGHEST_TEMPCH1, Ch_name2_2 = "3")
+                        }
+
+                    }
+                    else if (channel_len == '3') {
+
+                        if (uniqueChannelVerification.includes('1') && uniqueChannelVerification.includes('2') && uniqueChannelVerification.includes('3')) {
+                            populateDataForDiv3(response.Zone_NameTRAM3_1 = uniqueZoneNamesArrayCH1_2, Zone_NameTOAM3_1 = uniqueZoneNamesArrayCH1_1,
+                                TOAM_H3_1 = TOAM_HIGHEST_TEMPCH1, TRAM_H3_1 = TRAM_HIGHEST_TEMPCH1, Ch_name3_1 = "1", Zone_NameTRAM3_2 = uniqueZoneNamesCH2_1Array,
+                                Zone_NameTOAM3_2 = uniqueZoneNamesCH2_2Array, TOAM_H3_2 = TOAM_HIGHEST_TEMPCH2, TRAM_H3_2 = TRAM_HIGHEST_TEMPCH2, Ch_name3_2 = "2",
+                                Zone_NameTRAM3_3 = uniqueZoneNamesCH3_1Array, Zone_NameTOAM3_3 = uniqueZoneNamesCH3_2Array, TOAM_H3_3 = TOAM_HIGHEST_TEMPCH3,
+                                TRAM_H3_3 = TRAM_HIGHEST_TEMPCH3, Ch_name3_3 = "3")
+                        }
+                        else if (uniqueChannelVerification.includes('2') && uniqueChannelVerification.includes('3') && uniqueChannelVerification.includes('4')) {
+                            populateDataForDiv3(response.Zone_NameTRAM3_1 = uniqueZoneNamesCH2_1Array, Zone_NameTOAM3_1 = uniqueZoneNamesCH2_2Array,
+                                TOAM_H3_1 = TOAM_HIGHEST_TEMPCH2, TRAM_H3_1 = TRAM_HIGHEST_TEMPCH2, Ch_name3_1 = "2", Zone_NameTRAM3_2 = uniqueZoneNamesCH3_1Array,
+                                Zone_NameTOAM3_2 = uniqueZoneNamesCH3_2Array, TOAM_H3_2 = TOAM_HIGHEST_TEMPCH3, TRAM_H3_2 = TRAM_HIGHEST_TEMPCH3, Ch_name3_3 = "3",
+                                Zone_NameTRAM3_3 = uniqueZoneNamesCH4_2Array, Zone_NameTOAM3_3 = uniqueZoneNamesCH4_1Array,
+                                TOAM_H3_3 = TOAM_HIGHEST_TEMPCH4, TRAM_H3_3 = TRAM_HIGHEST_TEMPCH4, Ch_name3_2 = "4",)
+                        }
+                        else if (uniqueChannelVerification.includes('1') && uniqueChannelVerification.includes('3') && uniqueChannelVerification.includes('4')) {
+                            populateDataForDiv3(response.Zone_NameTRAM3_1 = uniqueZoneNamesArrayCH1_2, Zone_NameTOAM3_1 = uniqueZoneNamesArrayCH1_1,
+                                TOAM_H3_1 = TOAM_HIGHEST_TEMPCH1, TRAM_H3_1 = TRAM_HIGHEST_TEMPCH1, Ch_name1_1 = "1", Zone_NameTRAM3_2 = uniqueZoneNamesCH3_2Array,
+                                Zone_NameTOAM3_2 = uniqueZoneNamesCH3_1Array, TOAM_H3_2 = TOAM_HIGHEST_TEMPCH3, TRAM_H3_2 = TRAM_HIGHEST_TEMPCH3,Ch_name3_2 = "3",
+                                Zone_NameTRAM3_3 = uniqueZoneNamesCH4_2Array, Zone_NameTOAM3_3 = uniqueZoneNamesCH4_1Array, TOAM_H3_3 = TOAM_HIGHEST_TEMPCH4,
+                                TRAM_H3_3 = TRAM_HIGHEST_TEMPCH4, Ch_name3_3 = "4")
+                        }
+                        else if (uniqueChannelVerification.includes('4') && uniqueChannelVerification.includes('1') && uniqueChannelVerification.includes('2')) {
+                            populateDataForDiv3(response.Zone_NameTRAM3_1 = uniqueZoneNamesCH4_2Array, Zone_NameTOAM3_1 = uniqueZoneNamesCH4_1Array,
+                                TOAM_H3_1 = TOAM_HIGHEST_TEMPCH4, TRAM_H3_1 = TRAM_HIGHEST_TEMPCH4, Ch_name3_1 = "1", Zone_NameTRAM3_2 = uniqueZoneNamesArrayCH1_2,
+                                Zone_NameTOAM3_2 = uniqueZoneNamesArrayCH1_1, TOAM_H3_2 = TOAM_HIGHEST_TEMPCH1, TRAM_H3_2 = TRAM_HIGHEST_TEMPCH1, Ch_name3_2 = "2",
+                                Zone_NameTRAM3_3 = uniqueZoneNamesCH2_1Array, Zone_NameTOAM3_3 = uniqueZoneNamesCH2_2Array,
+                                TOAM_H3_3 = TOAM_HIGHEST_TEMPCH2, TRAM_H3_3 = TRAM_HIGHEST_TEMPCH2, Ch_name3_3 = "4")
+                        }
+
+                    }
+                    else if (channel_len == '4') {
+                        if (uniqueChannelVerification.includes('1') && uniqueChannelVerification.includes('2') && uniqueChannelVerification.includes('3') && uniqueChannelVerification.includes('4')) {
+                            populateDataForDiv4(response.Zone_NameTRAM4_1 = uniqueZoneNamesArrayCH1_2, Zone_NameTOAM4_1 = uniqueZoneNamesArrayCH1_1,
+                                TOAM_H4_1 = TOAM_HIGHEST_TEMPCH1, TRAM_H4_1 = TRAM_HIGHEST_TEMPCH1, Ch_name4_1 = "1", Zone_NameTRAM4_2 = uniqueZoneNamesCH2_1Array,
+                                Zone_NameTOAM4_2 = uniqueZoneNamesCH2_2Array, TOAM_H4_2 = TOAM_HIGHEST_TEMPCH2, TRAM_H4_2 = TRAM_HIGHEST_TEMPCH2, Ch_name4_2 = "2",
+                                Zone_NameTRAM4_3 = uniqueZoneNamesCH3_1Array, Zone_NameTOAM4_3 = uniqueZoneNamesCH3_2Array, TOAM_H4_3 = TOAM_HIGHEST_TEMPCH3,
+                                TRAM_H4_3 = TRAM_HIGHEST_TEMPCH3, Ch_name4_3 = "3", Zone_NameTRAM4_4 = uniqueZoneNamesCH4_2Array, Zone_NameTOAM4_4 = uniqueZoneNamesCH4_1Array,
+                                TOAM_H4_4 = TOAM_HIGHEST_TEMPCH4, TRAM_H4_4 = TRAM_HIGHEST_TEMPCH4, Ch_name4_4 = "4")
+                        }
+                    }
+
+                    //===========================================================================================================================================================
+                    tempOrangeAlarmMaxList_ch1 = [];//emptying the list
+                    tempOrangeAlarmMinList_ch1 = [];//emptying the list
+                    tempRedAlarmMaxList_ch1 = []//emptying the list
+                    tempRedAlarmMinList_ch1 = []//emptying the list
+
+                    tempOrangeAlarmMaxList_ch2 = []
+                    tempOrangeAlarmMinList_ch2 = []
+                    tempRedAlarmMaxList_ch2 = []
+                    tempRedAlarmMinList_ch2 = []
+
+                    tempOrangeAlarmMaxList_ch3 = []
+                    tempOrangeAlarmMinList_ch3 = []
+                    tempRedAlarmMaxList_ch3 = []
+                    tempRedAlarmMinList_ch3 = []
+
+                    tempOrangeAlarmMaxList_ch4 = []
+                    tempOrangeAlarmMinList_ch4 = []
+                    tempRedAlarmMaxList_ch4 = []
+                    tempRedAlarmMinList_ch4 = []
+                     
+                    Channel_verification=[]
+
+                },
+                error: function (error) {
+                    console.error("Error receiving data:", error);
+                }
+            })
+            graph_func1();
+            // graph_func2();
+            // graph_func3();
+            // graph_func4();
+
+        }
+        setInterval(setinterval_function, 6000)
+    </script>
+    <script>
+        //--- ========================================  for 4 channels ============================================================
+        document.getElementById("myDiv1").addEventListener("dblclick", function () {
+            window.location.href = "channel_1";
+        });
+        document.getElementById("myDiv2").addEventListener("dblclick", function () {
+            window.location.href = "channel_2";
+        });
+        document.getElementById("myDiv3").addEventListener("dblclick", function () {
+            window.location.href = "channel_3";
+        });
+        document.getElementById("myDiv4").addEventListener("dblclick", function () {
+            window.location.href = "channel_4";
+        });
+    </script>
+        <script>
+            function hideAlert() {
+                document.getElementById('Div1').style.display = 'none';
+            }
+    
+            function showAlert() {
+                document.getElementById('Div1').style.display = 'flex';
+            }
+            function hideAlert2_1() {
+                document.getElementById('Div2').style.display = 'none';
+            }
+    
+            function showAlert2_1() {
+                document.getElementById('Div2').style.display = 'flex';
+            }
+            function hideAlert2_2() {
+                document.getElementById('Div2').style.display = 'none';
+            }
+    
+            function showAlert2_2() {
+                document.getElementById('Div2').style.display = 'flex';
+            }
+            function hideAlert3_1() {
+                document.getElementById('Div3').style.display = 'none';
+            }
+    
+            function showAlert3_1() {
+                document.getElementById('Div3').style.display = 'flex';
+            }
+            function hideAlert3_2() {
+                document.getElementById('Div3').style.display = 'none';
+            }
+    
+            function showAlert3_2() {
+                document.getElementById('Div3').style.display = 'flex';
+            }
+            function hideAlert3_3() {
+                document.getElementById('Div3').style.display = 'none';
+            }
+    
+            function showAlert3_3() {
+                document.getElementById('Div3').style.display = 'flex';
+            }
+            function hideAlert4_1() {
+                document.getElementById('Div4').style.display = 'none';
+            }
+    
+            function showAlert4_1() {
+                document.getElementById('Div4').style.display = 'flex';
+            }
+            function hideAlert4_2() {
+                document.getElementById('Div4').style.display = 'none';
+            }
+    
+            function showAlert4_2() {
+                document.getElementById('Div4').style.display = 'flex';
+            }
+            function hideAlert4_3() {
+                document.getElementById('Div4').style.display = 'none';
+            }
+    
+            function showAlert4_3() {
+                document.getElementById('Div4').style.display = 'flex';
+            }
+            function hideAlert4_4() {
+                document.getElementById('Div4').style.display = 'none';
+            }
+    
+            function showAlert4_4() {
+                document.getElementById('Div4').style.display = 'flex';
+            }
+    
+        </script>
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src={% static 'assets/vendor/apexcharts/apexcharts.min.js' %}></script>
+    <script src={% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}></script>
+    <script src={% static 'assets/vendor/chart.js/chart.umd.js' %}></script>
+    <script src={% static 'assets/vendor/echarts/echarts.min.js' %}></script>
+    <script src={% static 'assets/vendor/quill/quill.min.js' %}></script>
+    <script src={% static 'assets/vendor/simple-datatables/simple-datatables.js' %}></script>
+    <script src={% static 'assets/vendor/tinymce/tinymce.min.js' %}></script>
+
+    <!-- Template Main JS File -->
+    <script src={% static 'assets/js/main.js' %}></script>
+
+</body>
+
+</html>

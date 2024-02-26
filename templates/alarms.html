@@ -1,0 +1,263 @@
+{%load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href={% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
+    <link href={% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %} rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href={% static 'assets/css/style.css' %} rel="stylesheet">
+
+    <!-- ===== DataTables Js and CSS File ===== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <!-- =============APEXCHARTS============ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <div id="Div1"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);z-index: 999999;">
+        <div style="display: flex;">
+            <div
+                style="width: 80vh; height: 80vh; border-radius: 50%; background-color: rgb(0, 0, 0); margin-left: 66vh;margin-top: 10vh">
+                <div>
+                    <img style="position: absolute; width: 8vh; height: 6vh; margin-top: 1vh;margin-left: 35vh;"
+                        src="{% static 'Images/alramgif.gif' %}" alt="alarm">
+                </div>
+                <div style="position: absolute; margin-top: 15vh;margin-left: 17vh; font-size:2.5vh; color: #fc0000; ">
+                    <p id="channel_name">Channel :</p>
+                </div>
+                <div style="position: absolute; margin-top: 20vh;margin-left: 17vh; font-size:2.5vh; color: #ff0000; ">
+                    <p id="highest-temperature">Highest Temperature:45</p>
+                </div>
+                <!-- <div style="position: absolute;margin-top: 18vh;margin-left: 10vh;; font-size:2.5vh; color: #ff0000;">
+                <p style="margin-left: 7vh; margin-top: 50px;">Zone name:</p>
+            </div> -->
+                <iframe src="{% static 'Alert Alarm.wav' %}" allow="autoplay" style="display:none" id="iframeAudio">
+                </iframe>
+                <audio id="player" loop autoplay style="position: absolute; margin-top: 25vh; margin-left: 17vh;">
+                    <source src="{% static 'Alert Alarm.wav' %}" type="audio/wav">
+
+                </audio>
+
+                <div class="card-title" type="text"
+                    style="height: 18vh; width: 50vh;border-radius: 1vh; font-size:2vh; background-color: rgb(189, 235, 230); margin-left: 15vh; margin-top: 30vh;">
+                    <p id="zone-name">Zone name: </p>
+                </div>
+                <div style="margin-top: 7vh;margin-left: 17vh;">
+                    <button onclick="showMoreDetails();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh;width: 16vh; height: 6vh ;font-size: 2.5vh;">Show
+                        More</button>
+                    <button onclick="hideAlert();"
+                        style="background-color: #007bff; color: white; border: none; border-radius: 1vh; margin-left: 10vh;font-size: 2.5vh; width: 17vh; height: 6vh">Acknowledge</button>
+                </div>
+                <div id="detailsContainer"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65vh; height: 35vh; background-color: rgb(255, 233, 233); border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <span onclick="hideMoreDetails();"
+                        style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 18px;">&times;</span>
+
+                    <!-- Display data vertically -->
+                    <div>
+                        <p>More Info:</p>
+                        <pre id="localStorageData" style="max-height: 25vh; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function populateDataForDiv1(Zone_NameTRAM, Zone_NameTOAM, TOAM_H, TRAM_H, Ch_name) {
+            var ZoneNameTRAM = Zone_NameTRAM
+            // console.log('=============',Zone_NameTOAM)
+            var ZoneNameTOAM = Zone_NameTOAM;
+            var TOAM_HIGHEST_TEMP = TOAM_H;
+            var TRAM_HIGHEST_TEMP = TRAM_H;
+            var CHANNEL_NAME = Ch_name
+            // console.log(TOAM_H, ZoneNameTRAM)
+            var maxTemp = Math.max(TOAM_HIGHEST_TEMP, TRAM_HIGHEST_TEMP);
+            var channel_name1 = document.querySelector('#channel_name')
+            var highestTempElement = document.querySelector('#highest-temperature');
+            var UniqueZoneName = document.querySelector('#zone-name');
+
+            if (UniqueZoneName) {
+                UniqueZoneName.innerText = 'Zone name:' + ZoneNameTRAM;
+            }
+            if (UniqueZoneName) {
+                UniqueZoneName.innerText += ',' + ZoneNameTOAM;
+            }
+            if (highestTempElement) {
+                highestTempElement.innerText = 'Highest Temperature: ' + maxTemp;
+            }
+            if (channel_name1) {
+                channel_name1.innerText = 'Channel :' + CHANNEL_NAME;
+            }
+        }
+        populateDataForDiv1();
+    </script>
+    <script>
+        function graph_func() {
+        $.ajax({
+            url: '/graph_data/', // Replace with your Django view's URL
+            method: "GET",
+            dataType: 'json',
+            success: function (response) {
+                // var fiber_len = parseInt(response.get_fiber_len);n
+                var zoneConfigData = response.zonedata
+                var channel_data = response.channel_data
+                var All_channels = response.All_channels
+                var Channel_verification = []
+
+                var tempOrangeAlarmMaxList_ch1 = []
+                var cloned_tempOrangeAlarmMaxList_ch1 = tempOrangeAlarmMaxList_ch1.slice();
+                // console.log(cloned_tempOrangeAlarmMaxList_ch1)
+                var tempOrangeAlarmMinList_ch1 = []
+                var cloned_tempOrangeAlarmMinList_ch1 = tempOrangeAlarmMinList_ch1.slice();
+
+                var tempRedAlarmMaxList_ch1 = []
+                var cloned_tempRedAlarmMaxList_ch1 = tempRedAlarmMaxList_ch1.slice();
+
+                var tempRedAlarmMinList_ch1 = []
+                var cloned_tempRedAlarmMinList_ch1 = tempRedAlarmMinList_ch1.slice();
+                for (var i = 0; i < All_channels.length; i++) {
+                    // console.log("----",All_channels.length)
+                    for (var j = 0; j < All_channels[i].length; j++) {
+                        var channel_validation = All_channels[i].length
+                        // console.log("----",channel_validation)
+                        var temp_validation = All_channels[i][j].temprature_curve_y_axis
+                        if (i === 0) {
+                            var channelNumOneData = zoneConfigData.filter(function (item) {
+                                return item.channel_num === '1';
+                            });
+                            // console.log(channelNumOneData)
+                            for (var k = 1; k < channelNumOneData.length; k++) {
+                                var selectedData = [
+                                    channelNum = channelNumOneData[k].channel_num,
+                                    zone_name = channelNumOneData[k].zone_name,
+                                    start_dist = channelNumOneData[k].start_dist,
+                                    end_dist = channelNumOneData[k].end_dist,
+                                ];
+                                var selectedData1 = {
+                                    Zone_name: channelNumOneData[k].zone_name,
+                                    Start_dist: channelNumOneData[k].start_dist,
+                                    End_dist: channelNumOneData[k].end_dist,
+                                    Temprature: temp_validation,
+
+                                }
+                                if (temp_validation >= channelNumOneData[k].temp_orange_alarm_max) {
+                                    tempOrangeAlarmMaxList_ch1.push(selectedData, Temp = channelNumOneData[k].temp_orange_alarm_max, y_temp = temp_validation)
+                                    Channel_verification.push(channelNumOneData[k].channel_num,)
+                                    cloned_tempOrangeAlarmMaxList_ch1.push(selectedData1, "***************************************")
+                                    localStorage.setItem('cloned_tempOrangeAlarmMaxList_ch1_showmore', JSON.stringify(cloned_tempOrangeAlarmMaxList_ch1))
+                                }
+                                if (temp_validation >= channelNumOneData[k].temp_red_alarm_max) {
+                                    tempRedAlarmMaxList_ch1.push(selectedData, Temp = channelNumOneData[k].temp_red_alarm_max, y_temp = temp_validation)
+                                    cloned_tempRedAlarmMaxList_ch1.push(selectedData1, "***************************************")
+                                    Channel_verification.push(channelNumOneData[k].channel_num,)
+                                    localStorage.setItem('cloned_tempRedAlarmMaxList_ch1_showmore', JSON.stringify(cloned_tempRedAlarmMaxList_ch1));
+                                    // console.log("------------", cloned_tempRedAlarmMaxList_ch1)
+                                }
+                            }
+                        }
+                    }
+                }
+                Channel_verification.sort(function (a, b) {
+                    return a.channel_num - b.channel_num;
+                });
+
+                // Now, Channel_verification is sorted based on channel_num
+                var uniqueChannelVerification = [...new Set(Channel_verification)];
+
+                var channel_len = uniqueChannelVerification.length
+                localStorage.setItem("uniqueChannelVerification", uniqueChannelVerification);
+                localStorage.setItem("channel_len", channel_len);
+                //====================================================================================================================================
+                var uniqueZoneNamesCH1_1 = new Set();
+                for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i++) {
+                    // Check if the element is an array and has a zone name (assuming zone names are strings)
+                    if (Array.isArray(tempOrangeAlarmMaxList_ch1[i]) && tempOrangeAlarmMaxList_ch1[i].length > 1) {
+                        uniqueZoneNamesCH1_1.add(tempOrangeAlarmMaxList_ch1[i][1]);
+                    }
+                } var uniqueZoneNamesArrayCH1_1 = Array.from(uniqueZoneNamesCH1_1);
+                localStorage.setItem('uniqueZoneNamesArrayCH1_1', JSON.stringify(uniqueZoneNamesArrayCH1_1));
+                //=======================================================================================================================
+                var uniqueZoneNamesCH1_2 = new Set();
+                for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i++) {
+                    if (Array.isArray(tempOrangeAlarmMaxList_ch1[i]) && tempOrangeAlarmMaxList_ch1[i].length > 1) {
+                        uniqueZoneNamesCH1_2.add(tempOrangeAlarmMaxList_ch1[i][1]);
+                    }
+                }
+                var uniqueZoneNamesArrayCH1_2 = Array.from(uniqueZoneNamesCH1_2);
+                localStorage.setItem('uniqueZoneNamesArrayCH1_2', JSON.stringify(uniqueZoneNamesArrayCH1_2));
+                //=======================================================================================================================
+                var TOAM_HIGHEST_TEMPCH1 = -Infinity;
+                for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i += 2) {
+                    var y_Temp = parseFloat(tempOrangeAlarmMaxList_ch1[i]);
+                    // Check if the current y_Temp is higher than the stored highest value
+                    if (!isNaN(y_Temp) && y_Temp > TOAM_HIGHEST_TEMPCH1) {
+                        TOAM_HIGHEST_TEMPCH1 = y_Temp;
+                    }
+                }
+
+                localStorage.setItem('TOAM_HIGHEST_TEMPCH1', JSON.stringify(TOAM_HIGHEST_TEMPCH1));
+                // ====================================================================================================================================
+
+                var TRAM_HIGHEST_TEMPCH1 = -Infinity;
+                for (var i = 0; i < tempOrangeAlarmMaxList_ch1.length; i += 2) {
+                    var y_Temp = parseFloat(tempOrangeAlarmMaxList_ch1[i]);
+                    if (!isNaN(y_Temp) && y_Temp > TRAM_HIGHEST_TEMPCH1) {
+                        TRAM_HIGHEST_TEMPCH1 = y_Temp;
+                    }
+                }
+                localStorage.setItem('TRAM_HIGHEST_TEMPCH1', JSON.stringify(TRAM_HIGHEST_TEMPCH1));
+                if (channel_len == '1') {
+                    if (uniqueChannelVerification.includes('1')) {
+                        // console.log('=============',uniqueZoneNamesCH1_1)
+                        populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesArrayCH1_1, Zone_NameTOAM = uniqueZoneNamesArrayCH1_2,
+                            TOAM_H = TOAM_HIGHEST_TEMPCH1, TRAM_H = TRAM_HIGHEST_TEMPCH1, Ch_name = "1")
+                    }
+                    else if (uniqueChannelVerification.includes('2')) {
+                        populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesCH2_2Array, Zone_NameTOAM = uniqueZoneNamesCH2_1Array,
+                            TOAM_H = TOAM_HIGHEST_TEMPCH2, TRAM_H = TRAM_HIGHEST_TEMPCH2, Ch_name = "2")
+                    }
+                    else if (uniqueChannelVerification.includes('3')) {
+                        populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesCH3_1Array, Zone_NameTOAM = uniqueZoneNamesCH3_1Array,
+                            TOAM_H = TOAM_HIGHEST_TEMPCH3, TRAM_H = TRAM_HIGHEST_TEMPCH3, Ch_name = "3")
+                    }
+                    else if (uniqueChannelVerification.includes('4')) {
+                        populateDataForDiv1(response.Zone_NameTRAM = uniqueZoneNamesCH4_2Array, Zone_NameTOAM = uniqueZoneNamesCH4_1Array,
+                            TOAM_H = TOAM_HIGHEST_TEMPCH4, TRAM_H = TRAM_HIGHEST_TEMPCH4, Ch_name = "4")
+                    }
+                }
+                Channel_verification = []
+                tempOrangeAlarmMaxList_ch1 = [];//emptying the list
+                tempOrangeAlarmMinList_ch1 = [];//emptying the list
+                tempRedAlarmMaxList_ch1 = []//emptying the list
+                tempRedAlarmMinList_ch1 = []//emptying the list
+            }
+        })
+    }
+    graph_func()
+    // setInterval(graph_func,6000)
+    </script>
+</body>
+
+</html>

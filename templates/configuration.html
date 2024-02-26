@@ -1,0 +1,617 @@
+{%load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>DTS-VER-2</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href={% static '/assets/img/favicon.png' %} rel="icon">
+    <link href={% static '/assets/img/apple-touch-icon.png' %} rel="apple-touch-icon">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href={% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
+    <link href={% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %} rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href={% static 'assets/css/style.css' %} rel="stylesheet">
+
+    <!-- ===== DataTables Js and CSS File ===== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center"  >
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a class="logo d-flex align-items-center">
+                <img src={% static 'assets/img/logo.png' %} alt="" style="height: 3vh;">
+                <span class="d-none d-lg-block">DTS-VER-2</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+    </header><!-- End Header -->
+
+    <!-- ===== Sidebar ===== -->
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item" style="width: 40vh;">
+                <a class="nav-link " href="dashboard_page">
+                    <i class="bi bi-houses-fill" style="color: #0000B8"></i>
+                    <span style="color: #0000B8;font-size:2.5vh;">Dashboard</span>
+                </a>
+                <a class="nav-link " href="configuration_page">
+                    <i class="bi bi-gear-fill" style="color: #0000B8"></i>
+                    <span style="color: #0000B8;font-size:2.5vh;">Configurations</span>
+                </a>
+                <a class="nav-link " href="report_page">
+                    <i class="bi bi-file-earmark-text" style="color: #0000B8"></i>
+                    <span style="color: #0000B8;font-size:2.5vh;">Reports</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- ===== End Sidebar ===== -->
+
+    <main id="main" class="main">
+        <section class="section dashboard">
+            <div class="row">
+                <!-- ================================  Channel Number Config Section  ======================================= -->
+                <div class="col-lg-5" style="height:10vh;width:65.3vh">
+                    <div class="card col-12">
+                        <h5 class="card-title" style="color: #0000B8 ; font-size:2.8vh;" >Channel Selection Configuration</h5>
+                        <div>
+                            <div style=" width: 50%;float: left;">
+                                <label style="font-weight: bold;margin-top: 2vh;font-size:2.5vh; " for="channel_selection">Number Of
+                                    Channel</label>
+                            </div>
+                            <div style="width: 30%; float: right;font-size:2.5vh; ">
+                                <select id="channel_selection" onclick="updateOptions()"
+                                    style="padding: 1.5vh; margin-bottom: 2.3vh; border: 1px solid #ccc; border-radius: 3px; width: 15vh; float: left;">
+                                    <option value="4">4</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div style="width: 100%;">
+                            <button id="submit_chn_num" class="btn btn-primary"
+                                style="height:7vh; margin-right: 2vh; width:23vh; float: right; margin-bottom: 2.2vh;font-size:2.5vh; ">Update
+                                Data</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- =============================== END Channel Number Config Section  ======================================= -->
+
+                <!-- ======================================  Channel Config Section  ========================================== -->
+                <div class="col-lg-7" style="height:33vh;width: 92vh">
+                    <div class="card col-12">
+                        <h5 class="card-title" style="color: #0000B8;font-size:2.8vh;">Channel Configuration</h5>
+                        <div style="width: 100%;">
+                            <div style=" float: left;">
+                                <label style="font-weight: bold; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                                    for="ch_channel_selection">Channel Number</label>
+                            </div>
+                            <div style="width: 15vh; float: left; margin-left: 2vh;font-size:2.5vh;">
+                                <select id="ch_channel_selection" onclick="default_data()"
+                                    style="padding: 1.5vh; margin-bottom: 2.3vh; border: 1px solid #ccc; border-radius: 3px; width: 15vh; float: left;">
+
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-weight: bold; margin-top: 2vh;margin-left: 8vh;width:16vh;font-size:2.5vh;"
+                                    for="fiber_len">Fiber Length</label>
+
+                                <!-- <div style="width: 20%; float: right; margin-left: 10px;"> -->
+                                <input type="number" id="fiber_length"
+                                    style="padding: 1.5vh; margin-bottom: 2.3vh;height: 7vh; border: 1px solid #ccc; border-radius: 3px; width: 16vh;margin-left: 2vh; "
+                                    name="fiber_len"></br>
+                            </div>
+                        </div>
+                        <div style="width: 100%;">
+                            <button id="submit_chn_config" class="btn btn-primary"
+                                style="height:7vh; margin-right: 2vh; width:23vh; float: right; margin-bottom: 2.2vh;font-size:2.5vh; ">Update
+                                Data</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- ====================================  End Channel Config Section  ========================================== -->
+            </div>
+
+            <!-- ======================================  Zone Config Section  ========================================== -->
+            <div class="card col-12" style="height:40vh">
+                <h5 class="card-title" style="color: #0000B8;font-size:2.8vh;">Zone Configuration</h5>
+                <div style="width: 100%;">
+                    <div style="width: 15%; float: left;">
+                        <label style="font-weight: bold; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="zh_channel_selection">Channel Number</label>
+                    </div>
+                    <div style="width: 10%; float: left;">
+                        <select id="zh_channel_selection"
+                            style="font-size:2.5vh;padding: 1.5vh; margin-bottom: 2vh; margin-top: 2vh;border: 1px solid #ccc; border-radius: 3px; width: 100%; float: left;">
+
+                        </select>
+                    </div>
+                    <div style="width: 13%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 2vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="zone_name">Zone Name</label>
+                    </div>
+                    <div style="width: 11%; float: left;">
+                        <input type="text"
+                            style="padding: 1.5vh; height: 7vh;margin-bottom: 2vh; border: 1px solid #ccc; border-radius: 3px; width: 98%; float: left;margin-top: 2vh"
+                            id="zone_name" name="zone_name">
+                    </div>
+                    <div style="width: 13%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 2vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="start_dist">Start Distance</label>
+                    </div>
+                    <div style="width: 11%; float: left;">
+                        <input type="number"
+                            style="padding: 1.5vh;height: 7vh;font-size:2.5vh; margin-bottom: 2vh;margin-left: 1vh; border: 1px solid #ccc; border-radius: 3px; width: 98%; float: left;margin-top:2vh"
+                            id="start_dist" name="start_dist" disabled>
+                    </div>
+                    <div style="width: 15%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 2vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="end_dist">End Distance</label>
+                    </div>
+                    <div style="width: 12%; float: right;">
+                        <input type="number"
+                            style="padding: 1.5vh;height: 7vh;  margin-bottom: 2vh; border: 1px solid #ccc; border-radius: 3px; width: 98%;margin-top: 2vh; "
+                            id="end_dist" name="end_dist">
+                    </div>
+                </div>
+
+                <div style="width: 100%;">
+                    <div style="width: 18%; float: left;">
+                        <label style="font-weight: bold; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="orange_max_alarm">Temp. Orange Alarm</label>
+                    </div>
+                    <div style="width: 4%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 2vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="orange_max_alarm">Max</label>
+                    </div>
+                    <div style="width: 11%; float: left;">
+                        <input type="number"
+                            style="padding: 1.5vh;height: 7vh; margin-left: 2vh; margin-bottom: 2vh; border: 1px solid #ccc; border-radius: 3px; width: 98%; float: left;"
+                            id="orange_max_alarm" name="orange_max_alarm">
+                    </div>
+                    <div style="width: 4%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 3vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="orange_min_alarm">Min</label>
+                    </div>
+                    <div style="width: 11%; float: left;">
+                        <input type="number"
+                            style="padding: 1.5vh;height: 7vh; margin-left:3vh; margin-bottom: 2vh; border: 1px solid #ccc; border-radius: 3px; width: 98%; float: left;"
+                            id="orange_min_alarm" name="orange_min_alarm">
+                    </div>
+                    <div style="width: 18%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 4vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="red_max_alarm">Temp. Red Alarm</label>
+                    </div>
+                    <div style="width: 4%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 3vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="red_max_alarm">Max</label>
+                    </div>
+                    <div style="width:11%; float: left;">
+                        <input type="number"
+                            style="padding: 1.5vh;height: 7vh; margin-left: 4vh; margin-bottom: 2vh; border: 1px solid #ccc; border-radius: 3px; width: 98%; float: left;"
+                            id="red_max_alarm" name="red_max_alarm">
+                    </div>
+                    <div style="width: 4%; float: left;">
+                        <label
+                            style="font-weight: bold; margin-left: 5vh; margin-bottom: 2vh; float: left; margin-top: 2vh;font-size:2.5vh;"
+                            for="red_min_alarm">Min</label>
+                    </div>
+                    <div style="width: 11%; float: right;">
+                        <input type="number"
+                            style="padding: 1.5vh;height: 7vh; margin-bottom: 2vh; border: 1px solid #ccc; border-radius: 3px; width: 98%; float: left;"
+                            id="red_min_alarm" name="red_min_alarm">
+                    </div>
+                </div>
+
+                <div style="width: 100%;">
+                    <div style="width: 100%;">
+                        <button id="insert_zone_data" class="btn btn-primary"
+                            style="height: 7vh; margin-right: 2vh; width:15%; float: right; margin-bottom: 2vh;font-size:2.5vh;"
+                            onclick="get_zone_config_data()">Insert</button>
+                    </div>
+                    <div style="width: 100%;">
+                        <button id="delete" class="btn btn-primary" onclick="delete_data()"
+                            style="font-size:2.5vh;height: 7vh; margin-right: 2vh; width:15%; float: right; margin-bottom: 2vh; background-color: gray; ">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function get_zone_config_data() {
+                    all_zone_config_data_list = [];
+                    get_zone_ch = document.getElementById("zh_channel_selection");
+                    get_zone_name = document.getElementById("zone_name");
+                    get_start_dist = document.getElementById("start_dist");
+                    get_end_dist = document.getElementById("end_dist");
+                    get_orange_max_alarm = document.getElementById("orange_max_alarm");
+                    get_orange_min_alarm = document.getElementById("orange_min_alarm");
+                    get_red_max_alarm = document.getElementById("red_max_alarm");
+                    get_red_min_alarm = document.getElementById("red_min_alarm");
+            
+                    z_get_zone_ch = get_zone_ch.options[get_zone_ch.selectedIndex].text;
+                    z_get_zone_name = get_zone_name.value;
+                    z_get_start_dist = get_start_dist.value;
+                    z_get_end_dist = get_end_dist.value;
+                    z_get_orange_max_alarm = get_orange_max_alarm.value;
+                    z_get_orange_min_alarm = get_orange_min_alarm.value;
+                    z_get_red_max_alarm = get_red_max_alarm.value;
+                    z_get_red_min_alarm = get_red_min_alarm.value;
+            
+                    all_zone_config_data_list.push(z_get_zone_ch, z_get_zone_name, z_get_start_dist, z_get_end_dist, z_get_orange_max_alarm, z_get_orange_min_alarm, z_get_red_max_alarm, z_get_red_min_alarm);
+            
+                    // Convert values to floats for numeric comparison
+                    var startDist = parseFloat(z_get_start_dist);
+                    var endDist = parseFloat(z_get_end_dist);
+                    var temp_red_alarm_max = parseFloat(z_get_red_max_alarm);
+                    var temp_orange_alarm_max = parseFloat(z_get_orange_max_alarm);
+                    var temp_red_alarm_min = parseFloat(z_get_red_min_alarm);
+                    var temp_orange_alarm_min = parseFloat(z_get_orange_min_alarm);
+            
+                    // Check conditions
+                    if (isNaN(startDist) || isNaN(endDist) || startDist >= endDist) {
+                        alert("Please enter a valid end distance greater than start distance.");
+                        return;
+                    }
+            
+                    if (isNaN(temp_red_alarm_max) || isNaN(temp_orange_alarm_max) || temp_red_alarm_max <= temp_orange_alarm_max) {
+                        alert("Please enter a valid temp_red_alarm_max greater than temp_orange_alarm_max.");
+                        return;
+                    }
+            
+                    if (isNaN(temp_red_alarm_min) || isNaN(temp_orange_alarm_min) || temp_red_alarm_min >= temp_orange_alarm_min) {
+                        alert("Please enter a valid temp_red_alarm_min less than temp_orange_alarm_min.");
+                        return;
+                    }
+            
+                    // Continue with AJAX request and other actions
+                    var csrfToken = '{{ csrf_token }}';
+                    $.ajax({
+                        url: '/insert_zone_config/', // Replace with your Django view's URL
+                        method: "POST",
+                        data: {
+                            csrfmiddlewaretoken: csrfToken,
+                            'zone_config_list': all_zone_config_data_list,
+                        },
+                        success: function (response) {
+                            console.log("Data sent successfully");
+            
+                            // Call the function to update start distance immediately
+                            updateStartDistance();
+                        },
+                        error: function (error) {
+                            console.error("Error sending data:", error);
+                        }
+                    });
+            
+                    add_datatable_data(all_zone_config_data_list);
+            
+                    // Reset input values
+                    get_zone_name.value = '';
+                    get_start_dist.value = '';
+                    get_end_dist.value = '';
+                    get_orange_max_alarm.value = '';
+                    get_orange_min_alarm.value = '';
+                    get_red_max_alarm.value = '';
+                    get_red_min_alarm.value = '';
+                }
+            </script>
+            <!-- ===================================== End Zone Config Section  ========================================== -->
+
+            <!-- ======================================  View Zone Config Section  ========================================== -->
+            <div class="card col-12" style="min-height:20vh ;font-size: 2.5vh;">
+                <!-- <div style="margin-top: 2vh;font-size: 2.5vh;"> </div> -->
+                <table id="zone_details_main_table" class="table"
+                    style="width: 100%; margin-top: 2vh; margin-bottom: 2vh;font-size: 2.5vh;">
+                    <thead>
+                        <th style="text-align: center;font-size: 2.5vh;">Channel Number</th>
+                        <th style="text-align: center;font-size: 2.5vh;">Zone Name</th>
+                        <th style="text-align: center;font-size: 2.5vh;">Start Distance</th>
+                        <th style="text-align: center;font-size: 2.5vh;">End Distance</th>
+                        <th style="text-align: center;font-size: 2.5vh;">Temp. Orange Max Alarm</th>
+                        <th style="text-align: center;font-size: 2.5vh;">Temp. Orange Min Alarm</th>
+                        <th style="text-align: center;font-size: 2.5vh;">Temp. Red Max Alarm</th>
+                        <th style="text-align: center;font-size: 2.5vh;">Temp. Red Min Alarm</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <div style="margin-top: 2vh;"> </div>
+            </div>
+            <script>
+                var zone_conf_datatable_column = [
+                    { data: 'channel_num' },
+                    { data: 'zone_name' },
+                    { data: 'start_dist' },
+                    { data: 'end_dist' },
+                    { data: 'temp_orange_alarm_max' },
+                    { data: 'temp_orange_alarm_min' },
+                    { data: 'temp_red_alarm_max' },
+                    { data: 'temp_red_alarm_min' },
+                ];
+
+                var zone_details_table = $('#zone_details_main_table').DataTable({
+                    ordering: false,
+                    searching: false,
+                    // "hover":true,
+
+                    columns: zone_conf_datatable_column,
+                });
+            </script>
+
+            <script>
+                function add_datatable_data(get_data) {
+                    var new_zone_conf_DataObject = {};
+                    zone_conf_datatable_column.forEach((column, index) => {
+                        new_zone_conf_DataObject[column.data] = get_data[index];
+                    });
+                    zone_details_table.row.add(new_zone_conf_DataObject).draw(false);
+                }
+            </script>
+
+            <script>
+                $.ajax({
+                    url: '/get_zone_config_data/', // Replace with your Django view's URL
+                    method: "GET",
+                    dataType: 'json',
+                    success: function (response) {
+                        fetch_datatable_zone_data = response.zone_config_data
+                        zone_details_table.rows.add(fetch_datatable_zone_data).draw(false);
+                    },
+                    error: function (error) {
+                        console.error("Error receiving data:", error);
+                    }
+                });
+            </script>
+
+            <!-- ===================================== End ViewZone Config Section  ========================================== -->
+
+        </section>
+    </main><!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>TTSPL</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            Designed by TTSPL</a>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src={% static 'assets/vendor/apexcharts/apexcharts.min.js' %}></script>
+    <script src={% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}></script>
+    <script src={% static 'assets/vendor/chart.js/chart.umd.js' %}></script>
+    <script src={% static 'assets/vendor/echarts/echarts.min.js' %}></script>
+    <script src={% static 'assets/vendor/quill/quill.min.js' %}></script>
+    <script src={% static 'assets/vendor/simple-datatables/simple-datatables.js' %}></script>
+    <script src={% static 'assets/vendor/tinymce/tinymce.min.js' %}></script>
+
+    <!-- Template Main JS File -->
+    <script src={% static 'assets/js/main.js' %}></script>
+
+</body>
+<!--  -->
+<script>
+    function updateOptions() {
+        // Get the selected value from the first select tag
+        var selectedValue = document.getElementById("channel_selection").value;
+
+        // Get references to the second and third select tags
+        var select2 = document.getElementById("ch_channel_selection");
+        var select3 = document.getElementById("zh_channel_selection");
+
+        // Clear existing options in the second and third select tags
+        select2.innerHTML = "";
+        select3.innerHTML = "";
+
+        // Generate new options based on the selected value
+        for (var i = 1; i <= selectedValue; i++) {
+            var option = document.createElement("option");
+            option.value = i;
+            option.text = " " + i;
+
+            // Append the option to both select2 and select3
+            select2.add(option.cloneNode(true));
+            select3.add(option.cloneNode(true));
+        }
+        localStorage.setItem("selectedValue", selectedValue);
+
+    }
+    function setInitialValues() {
+        // Get the stored selected value from localStorage
+        var storedValue = localStorage.getItem("selectedValue");
+
+        // If a value is stored, set it as the selected value for both select2 and select3
+        if (storedValue) {
+            document.getElementById("channel_selection").value = storedValue;
+            updateOptions();
+        }
+    }
+
+    // Call setInitialValues when the page loads
+    window.onload = setInitialValues;
+
+</script>
+<!-- ======================================================================================= -->
+
+
+
+
+
+<!-- ===============================================showing data in fiber_length when any channel is selected================================= -->
+<script>
+    function default_data() {
+        // Get the selected value from the first select tag
+        var selectedValue = document.getElementById("ch_channel_selection").value;
+        var fiberdata = document.getElementById("fiber_length").value;
+        // localStorage.setItem("fiberdata", fiberdata);
+        $.ajax({
+            url: '/default_Data/', // Replace with your Django view's URL
+            method: "GET",
+            dataType: 'json',
+            success: function (response) {
+                fetch_datatable_fiber_data = response.get_channel_fiber
+                if (selectedValue >= 1 && selectedValue <= fetch_datatable_fiber_data.length) {
+                    var selectedData = fetch_datatable_fiber_data[selectedValue - 1];
+                    console.log(selectedData);
+                }
+                document.getElementById("fiber_length").value = selectedData
+                var selectedData2 = document.getElementById("fiber_length").value;
+
+
+
+                console.log(fetch_datatable_fiber_data)
+            },
+            error: function (error) {
+                console.error("Error receiving data:", error);
+            }
+        });
+    }
+
+</script>
+<script>
+    $(document).ready(function () {
+        // Call the function to fetch start distance on page load
+        updateStartDistance();
+
+        // Attach the click event to #zh_channel_selection
+        $('#zh_channel_selection').click(function () {
+            // Call the function to fetch start distance when the dropdown is clicked
+            updateStartDistance();
+        });
+    });
+
+    function updateStartDistance() {
+        var selectedChannel = $('#zh_channel_selection').val();
+
+        // Use AJAX to fetch data from the server
+        $.ajax({
+            type: 'GET',
+            url: '/get_end_dist/',
+            data: { 'channel_num': selectedChannel },
+            success: function (response) {
+                console.log(response);
+                $('#start_dist').val(response.end_dist);
+            },
+            error: function (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+
+
+</script>
+
+
+<!-- =======================================UPDATE DATA OF CHANNEL CONFIG==================================== -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var navigateButton = document.getElementById('submit_chn_config');
+        navigateButton.addEventListener("click", function () {
+            var channel_num = String(document.getElementById('ch_channel_selection').value);
+            var fiber_len = String(document.getElementById('fiber_length').value);
+            var csrfToken = '{{ csrf_token }}';
+
+            $.ajax({
+                method: "POST",
+                url: '/update_channel_Config/',
+                data: {
+                    'channel_num': channel_num,
+                    'fiber_len': fiber_len,
+
+                },
+                headers: { "X-CSRFToken": csrfToken },
+
+                success: function (response) {
+                    console.log("data sent successfully");
+                },
+                error: function (error) {
+                    console.error("error sending data", error);
+                }
+            });
+        });
+    });
+
+</script>
+<!-- ================================================DELETING ZONE DATA AS PER SELECTED CHANNEL================================================ -->
+<script>
+    function delete_data() {
+        // Get the selected value from the first select tag
+        var selectedValue = document.getElementById("zh_channel_selection").value;
+        var csrfToken = '{{ csrf_token }}';
+        $.ajax({
+            url: '/delete_Data/', // Replace with your Django view's URL
+            method: "POST",
+            data: {
+                'selectedValue': selectedValue,
+                csrfmiddlewaretoken: csrfToken,
+            },
+            success: function (response) {
+                console.log(response);
+                // Clear existing data in the DataTable
+                zone_details_table.clear().draw();
+
+                // Fetch and add new data to the DataTable
+                $.ajax({
+                    url: '/get_zone_config_data/', // Replace with your Django view's URL
+                    method: "GET",
+                    dataType: 'json',
+                    success: function (response) {
+                        fetch_datatable_zone_data = response.zone_config_data
+                        zone_details_table.rows.add(fetch_datatable_zone_data).draw(false);
+                    },
+                    error: function (error) {
+                        console.error("Error receiving data:", error);
+                    }
+                });
+            },
+            error: function (error) {
+                console.error("Error receiving data:", error);
+            }
+        });
+    }
+</script>
+
+
+</html>
